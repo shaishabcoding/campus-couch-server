@@ -11,4 +11,24 @@ export const ProductServices = {
       new: true,
     });
   },
+
+  async list({ page, limit }: Record<string, any>) {
+    const products = await Product.find()
+      .skip((page - 1) * limit)
+      .limit(limit);
+
+    const total = await Product.countDocuments();
+
+    return {
+      products,
+      meta: {
+        pagination: {
+          page,
+          limit,
+          total,
+          totalPage: Math.ceil(total / limit),
+        },
+      },
+    };
+  },
 };

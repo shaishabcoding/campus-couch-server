@@ -29,6 +29,10 @@ admin.patch(
   ProductControllers.edit,
 );
 
+const user = Router();
+
+user.get('/', purifyRequest(QueryValidations.list), ProductControllers.list);
+
 export const ProductRoutes = {
   admin,
 };

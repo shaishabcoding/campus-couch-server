@@ -37,4 +37,14 @@ export const ProductControllers = {
       data,
     });
   }),
+
+  list: catchAsync(async (req, res) => {
+    const { meta, products } = await ProductServices.list(req.query);
+
+    serveResponse(res, {
+      message: 'Products retrieved successfully!',
+      meta,
+      data: products,
+    });
+  }),
 };
