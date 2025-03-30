@@ -8,7 +8,7 @@ export const ProductControllers = {
   create: catchAsync(async ({ body, user }, res) => {
     const productData: TProduct = {
       ...body,
-      user: user!._id!,
+      admin: user!._id!,
       isBuyable: !!body.price,
       isRentable: !!body.rentPrice,
     };

@@ -34,7 +34,6 @@ const productSchema = new Schema<TProduct>(
     },
     category: {
       type: String,
-      required: true,
     },
     type: {
       type: String,
