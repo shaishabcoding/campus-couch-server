@@ -19,16 +19,10 @@ router.post(
 router.patch(
   '/edit',
   auth(EUserRole.USER, EUserRole.ADMIN),
-  imageUploader(
-    (req, images) => {
-      req.body.avatar = images[0];
-    },
-    {
-      isOptional: true,
-      width: 300,
-      height: 300,
-    },
-  ),
+  imageUploader({
+    width: 300,
+    height: 300,
+  }),
   purifyRequest(UserValidations.edit),
   UserControllers.edit,
 );

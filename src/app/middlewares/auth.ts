@@ -13,7 +13,8 @@ import { EUserRole } from '../modules/user/User.enum';
 const auth = (...roles: EUserRole[]) =>
   catchAsync(async (req, _, next) => {
     req.user = (await User.findById(
-      verifyToken(req.headers.authorization!.split(' ')[1], 'access').userId,
+      verifyToken(req.headers.authorization?.split(' ')?.[1] ?? '', 'access')
+        .userId,
     ))!;
 
     if (

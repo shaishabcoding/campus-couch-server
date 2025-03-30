@@ -28,7 +28,10 @@ const config = {
     default_avatar: env('default avatar', '/images/placeholder.png'),
   },
   url: {
-    database: env('database url', 'mongodb://127.0.0.1:27017'),
+    database: env(
+      'database url',
+      `mongodb://127.0.0.1:27017/${name.toLowerCase().replace(' ', '-')}`,
+    ),
     payment: {
       success: env('payment success url', `${href}/payment/success`),
       cancel: env('payment cancel url', `${href}/payment/cancel`),
