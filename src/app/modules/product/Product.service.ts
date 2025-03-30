@@ -16,7 +16,7 @@ export const ProductServices = {
 
     await product.save();
 
-    oldImages?.forEach(deleteFile);
+    if (productData?.images) oldImages?.forEach(deleteFile);
 
     return product;
   },
