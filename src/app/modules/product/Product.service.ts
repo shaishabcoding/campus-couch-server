@@ -31,4 +31,12 @@ export const ProductServices = {
       },
     };
   },
+
+  async retrieve(productId: string) {
+    return await Product.findById(productId);
+  },
+
+  async delete(productId: string) {
+    return await Product.findByIdAndDelete(productId);
+  },
 };

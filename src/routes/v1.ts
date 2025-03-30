@@ -7,6 +7,7 @@ import { TRoute } from '../types/route.types';
 import AdminRoutes from '../app/modules/admin/Admin.routes';
 // import { OrderRoutes } from '../app/modules/order/Order.route';
 import { PaymentRoutes } from '../app/modules/payment/Payment.route';
+import { ProductRoutes } from '../app/modules/product/Product.route';
 // import { CartRoutes } from '../app/modules/cart/Cart.route';
 
 const routes: TRoute[] = [
@@ -23,6 +24,10 @@ const routes: TRoute[] = [
     path: '/admin',
     middlewares: [auth(EUserRole.ADMIN)],
     route: AdminRoutes,
+  },
+  {
+    path: '/products',
+    route: ProductRoutes.user,
   },
   // {
   //   path: '/orders',

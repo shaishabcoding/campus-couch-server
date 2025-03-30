@@ -47,4 +47,21 @@ export const ProductControllers = {
       data: products,
     });
   }),
+
+  retrieve: catchAsync(async ({ params }, res) => {
+    const data = await ProductServices.retrieve(params.productId);
+
+    serveResponse(res, {
+      message: 'Product retrieved successfully!',
+      data,
+    });
+  }),
+
+  delete: catchAsync(async ({ params }, res) => {
+    await ProductServices.delete(params.productId);
+
+    serveResponse(res, {
+      message: 'Product deleted successfully!',
+    });
+  }),
 };

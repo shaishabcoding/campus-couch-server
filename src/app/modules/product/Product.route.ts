@@ -29,10 +29,23 @@ admin.patch(
   ProductControllers.edit,
 );
 
+admin.delete(
+  '/:productId/delete',
+  purifyRequest(QueryValidations.exists('productId', Product)),
+  ProductControllers.delete,
+);
+
 const user = Router();
 
 user.get('/', purifyRequest(QueryValidations.list), ProductControllers.list);
 
+user.get(
+  '/:productId',
+  purifyRequest(QueryValidations.exists('productId', Product)),
+  ProductControllers.retrieve,
+);
+
 export const ProductRoutes = {
   admin,
+  user,
 };
