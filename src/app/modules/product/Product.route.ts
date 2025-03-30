@@ -35,6 +35,18 @@ admin.delete(
   ProductControllers.delete,
 );
 
+/** create variant */
+admin.post(
+  '/:productId/variant',
+  purifyRequest(QueryValidations.exists('productId', Product)),
+  imageUploader({
+    width: 700,
+    height: 700,
+  }),
+  purifyRequest(ProductValidations.create),
+  ProductControllers.create,
+);
+
 const user = Router();
 
 user.get('/', purifyRequest(QueryValidations.list), ProductControllers.list);

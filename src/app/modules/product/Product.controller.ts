@@ -5,13 +5,15 @@ import { ProductServices } from './Product.service';
 import { TProduct } from './Product.interface';
 
 export const ProductControllers = {
-  create: catchAsync(async ({ body, user }, res) => {
+  create: catchAsync(async ({ body, user, params }, res) => {
     const productData: TProduct = {
-      ...body,
-      admin: user!._id!,
       isBuyable: !!body.price,
       isRentable: !!body.rentPrice,
+      ...body,
+      admin: user!._id!,
     };
+
+    productData.refProduct = params?.productId;
 
     const data = await ProductServices.create(productData);
 
