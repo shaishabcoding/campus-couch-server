@@ -1,3 +1,4 @@
+import deleteFile from '../../../util/file/deleteFile';
 import { TProduct } from './Product.interface';
 import { Product } from './Product.model';
 
@@ -7,9 +8,17 @@ export const ProductServices = {
   },
 
   async edit(productId: string, productData: Partial<TProduct>) {
-    return await Product.findByIdAndUpdate(productId, productData, {
-      new: true,
-    });
+    const product = (await Product.findById(productId))!;
+
+    const oldImages = product.images;
+
+    Object.assign(product, productData);
+
+    await product.save();
+
+    oldImages?.forEach(deleteFile);
+
+    return product;
   },
 
   async list({ page, limit }: Record<string, any>) {
@@ -37,6 +46,10 @@ export const ProductServices = {
   },
 
   async delete(productId: string) {
-    return await Product.findByIdAndDelete(productId);
+    const product = (await Product.findByIdAndDelete(productId))!;
+
+    product.images?.forEach(deleteFile);
+
+    return product;
   },
 };
