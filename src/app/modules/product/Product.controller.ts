@@ -21,4 +21,20 @@ export const ProductControllers = {
       data,
     });
   }),
+
+  edit: catchAsync(async ({ params, body }, res) => {
+    const productData: TProduct = {
+      isBuyable: !!body.price,
+      isRentable: !!body.rentPrice,
+      ...body,
+    };
+
+    const data = await ProductServices.edit(params.productId, productData);
+
+    serveResponse(res, {
+      statusCode: StatusCodes.OK,
+      message: 'Product updated successfully!',
+      data,
+    });
+  }),
 };
