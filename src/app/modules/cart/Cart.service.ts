@@ -2,12 +2,15 @@ import { Types } from 'mongoose';
 import Cart from './Cart.model';
 
 export const CartServices = {
-  async add(product: string, user: Types.ObjectId) {
+  async sync(productIds: string[], user: Types.ObjectId) {
     return Cart.findOneAndUpdate(
       { user },
-      { $addToSet: { products: product } },
+      { $addToSet: { products: { $each: productIds } } },
       { upsert: true, new: true },
-    ).lean();
+    )
+      .select('products')
+      .populate('products')
+      .lean();
   },
 
   async retrieve(user: Types.ObjectId) {
@@ -17,10 +20,10 @@ export const CartServices = {
       .lean();
   },
 
-  async remove(product: string, user: Types.ObjectId) {
+  async remove(productId: string, user: Types.ObjectId) {
     return Cart.findOneAndUpdate(
       { user },
-      { $pull: { products: product } },
+      { $pull: { products: productId } },
       { upsert: true, new: true },
     ).lean();
   },
