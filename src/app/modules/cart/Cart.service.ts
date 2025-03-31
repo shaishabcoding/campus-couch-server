@@ -13,13 +13,6 @@ export const CartServices = {
       .lean();
   },
 
-  async retrieve(user: Types.ObjectId) {
-    return Cart.findOne({ user })
-      .select('products')
-      .populate('products')
-      .lean();
-  },
-
   async remove(productId: string, user: Types.ObjectId) {
     return Cart.findOneAndUpdate(
       { user },

@@ -21,15 +21,6 @@ export const CartControllers = {
     });
   }),
 
-  retrieve: catchAsync(async ({ user }, res) => {
-    const products = (await CartServices.retrieve(user!._id!))?.products ?? [];
-
-    serveResponse(res, {
-      message: 'Cart retrieved successfully',
-      data: products,
-    });
-  }),
-
   remove: catchAsync(async ({ params, user }, res) => {
     await CartServices.remove(params.productId, user!._id!);
 

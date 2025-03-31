@@ -7,10 +7,8 @@ import { CardValidations } from './Cart.validation';
 
 const router = Router();
 
-router.get('/', CartControllers.retrieve);
-
 router.post(
-  '/:productId/add',
+  '/:productId',
   purifyRequest(QueryValidations.exists('productId', Product)),
   CartControllers.add,
 );
