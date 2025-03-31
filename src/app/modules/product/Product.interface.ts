@@ -15,6 +15,7 @@ export type TProduct = {
   stock: number;
   notes: string[];
   refProduct?: Types.ObjectId | string;
+  rating?: number;
   createdAt: Date;
   updatedAt: Date;
 };

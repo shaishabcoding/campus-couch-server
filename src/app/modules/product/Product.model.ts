@@ -51,6 +51,12 @@ const productSchema = new Schema<TProduct>(
       type: Schema.Types.ObjectId,
       ref: 'Product',
     },
+    rating: {
+      type: Number,
+      min: 1,
+      max: 5,
+      default: 5,
+    },
   },
   {
     timestamps: true,

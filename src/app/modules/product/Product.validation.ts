@@ -17,6 +17,7 @@ export const ProductValidations = {
         .string()
         .transform(strNotes => JSON.parse(strNotes) as string[])
         .optional(),
+      rating: z.coerce.number().min(1).max(5).optional(),
     }),
   }),
 
