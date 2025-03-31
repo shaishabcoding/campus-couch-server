@@ -31,4 +31,19 @@ export const ReviewControllers = {
       message: 'Review deleted successfully!',
     });
   }),
+
+  list: catchAsync(async ({ query, params }, res) => {
+    const filter: Record<string, any> = {};
+
+    if (params.productId) filter.product = params?.productId;
+    if (params.bundleId) filter.bundle = params?.bundleId;
+
+    const { reviews, meta } = await ReviewServices.list(filter, query);
+
+    serveResponse(res, {
+      message: 'Reviews retrieved successfully!',
+      meta,
+      data: reviews,
+    });
+  }),
 };

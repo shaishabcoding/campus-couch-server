@@ -29,4 +29,26 @@ export const ReviewServices = {
 
     return Review.findByIdAndDelete(reviewId);
   },
+
+  async list(filter: Partial<TReview>, { page, limit }: Record<string, any>) {
+    const reviews = await Review.find(filter)
+      .skip((page - 1) * limit)
+      .limit(limit)
+      .select('rating user content updatedAt')
+      .populate('user', 'name avatar -_id');
+
+    const total = await Review.countDocuments(filter);
+
+    return {
+      reviews,
+      meta: {
+        pagination: {
+          page,
+          limit,
+          total,
+          totalPage: Math.ceil(total / limit),
+        },
+      },
+    };
+  },
 };

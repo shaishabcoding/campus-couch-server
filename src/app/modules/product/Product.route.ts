@@ -60,6 +60,15 @@ user.get(
   ProductControllers.retrieve,
 );
 
+user.get(
+  '/:productId/reviews',
+  purifyRequest(
+    QueryValidations.exists('productId', Product),
+    QueryValidations.list,
+  ),
+  ReviewControllers.list,
+);
+
 user.patch(
   '/:productId/review',
   auth(EUserRole.USER, EUserRole.ADMIN),
