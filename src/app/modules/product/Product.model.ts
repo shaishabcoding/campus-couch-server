@@ -6,6 +6,7 @@ const productSchema = new Schema<TProduct>(
     admin: {
       type: Schema.Types.ObjectId,
       ref: 'User',
+      select: false,
       required: true,
     },
     name: {
