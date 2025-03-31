@@ -1,8 +1,9 @@
-import { Types } from 'mongoose';
+import { ClientSession, startSession, Types } from 'mongoose';
 import { TReview } from './Review.interface';
 import Review from './Review.model';
 import ServerError from '../../../errors/ServerError';
 import { StatusCodes } from 'http-status-codes';
+import { Product } from '../product/Product.model';
 
 export const ReviewServices = {
   async store(reviewData: TReview, user: Types.ObjectId, skip: boolean) {
@@ -18,16 +19,67 @@ export const ReviewServices = {
     if (!review) review = new Review({ ...reviewData, user });
     else Object.assign(review, reviewData);
 
-    return review.save();
+    const session = await startSession();
+    try {
+      session.startTransaction();
+
+      await review.save({ session });
+      if (product) await this.updateOnRating(product, 'product', session);
+      /** TODO: update bundle rating */
+
+      await session.commitTransaction();
+      return review;
+    } catch (error) {
+      await session.abortTransaction();
+      throw error;
+    } finally {
+      await session.endSession();
+    }
   },
 
   async delete(reviewId: string, user: Types.ObjectId, skip: boolean) {
-    const review = (await Review.findById(reviewId).lean())!;
+    const review = (await Review.findById(reviewId))!;
 
-    if (!skip && String(review.user) !== String(user))
+    if (!skip && !user.equals(review.user))
       throw new ServerError(StatusCodes.UNAUTHORIZED, 'You are not authorized');
 
-    return Review.findByIdAndDelete(reviewId);
+    const session = await startSession();
+    try {
+      session.startTransaction();
+
+      await review.deleteOne({ session });
+
+      if (review.product)
+        await this.updateOnRating(review.product, 'product', session);
+
+      /** TODO: update bundle rating */
+
+      await session.commitTransaction();
+    } catch (error) {
+      await session.abortTransaction();
+      throw error;
+    } finally {
+      await session.endSession();
+    }
+  },
+
+  async updateOnRating(
+    _id: Types.ObjectId,
+    type: 'product' | 'bundle',
+    session: ClientSession,
+  ) {
+    const rating =
+      (
+        await Review.aggregate([
+          { $match: { [type]: _id } },
+          { $group: { _id: null, avg: { $avg: '$rating' } } },
+        ])
+      )[0]?.avg ?? 5;
+
+    switch (type) {
+      case 'product':
+        return await Product.findByIdAndUpdate(_id, { rating }, { session });
+    }
   },
 
   async list(filter: Partial<TReview>, { page, limit }: Record<string, any>) {
