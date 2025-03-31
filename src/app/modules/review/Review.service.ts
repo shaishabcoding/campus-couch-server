@@ -6,7 +6,11 @@ import { StatusCodes } from 'http-status-codes';
 import { Product } from '../product/Product.model';
 
 export const ReviewServices = {
-  async store(reviewData: TReview, user: Types.ObjectId, skip: boolean) {
+  async store(
+    reviewData: Record<string, any>,
+    user: Types.ObjectId,
+    skip: boolean,
+  ) {
     const { product, bundle } = reviewData;
     const filter: Partial<TReview> = {
       product,
@@ -24,7 +28,7 @@ export const ReviewServices = {
       session.startTransaction();
 
       await review.save({ session });
-      if (product) await this.updateOnRating(product, 'product', session);
+      if (product) await this.updateOnRating(product.oid, 'product', session);
       /** TODO: update bundle rating */
 
       await session.commitTransaction();
@@ -73,7 +77,7 @@ export const ReviewServices = {
         await Review.aggregate([
           { $match: { [type]: _id } },
           { $group: { _id: null, avg: { $avg: '$rating' } } },
-        ])
+        ]).session(session)
       )[0]?.avg ?? 5;
 
     switch (type) {
