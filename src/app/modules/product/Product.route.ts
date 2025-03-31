@@ -5,6 +5,9 @@ import purifyRequest from '../../middlewares/purifyRequest';
 import { ProductValidations } from './Product.validation';
 import { QueryValidations } from '../query/Query.validation';
 import { Product } from './Product.model';
+import { ReviewControllers } from '../review/Review.controller';
+import auth from '../../middlewares/auth';
+import { EUserRole } from '../user/User.enum';
 
 const admin = Router();
 
@@ -55,6 +58,13 @@ user.get(
   '/:productId',
   purifyRequest(QueryValidations.exists('productId', Product)),
   ProductControllers.retrieve,
+);
+
+user.patch(
+  '/:productId/review',
+  auth(EUserRole.USER, EUserRole.ADMIN),
+  purifyRequest(QueryValidations.exists('productId', Product)),
+  ReviewControllers.store,
 );
 
 export const ProductRoutes = {
