@@ -1,6 +1,5 @@
 import { model, Schema } from 'mongoose';
 import { TProduct } from './Product.interface';
-import { string } from 'zod';
 
 const productSchema = new Schema<TProduct>(
   {
@@ -58,9 +57,9 @@ const productSchema = new Schema<TProduct>(
       max: 5,
       default: 5,
     },
-    color: string,
-    size: string,
-    materials: [string],
+    color: String,
+    size: String,
+    materials: [String],
   },
   {
     timestamps: true,
