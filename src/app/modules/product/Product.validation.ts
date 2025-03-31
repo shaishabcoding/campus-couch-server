@@ -18,6 +18,12 @@ export const ProductValidations = {
         .transform(strNotes => JSON.parse(strNotes) as string[])
         .optional(),
       rating: z.coerce.number().min(1).max(5).optional(),
+      color: z.string().optional(),
+      size: z.string().optional(),
+      materials: z
+        .string()
+        .transform(strMaterials => JSON.parse(strMaterials) as string[])
+        .optional(),
     }),
   }),
 
@@ -38,6 +44,12 @@ export const ProductValidations = {
         .transform(strNotes => JSON.parse(strNotes) as string[])
         .optional(),
       refProduct: z.string().optional(),
+      color: z.string().optional(),
+      size: z.string().optional(),
+      materials: z
+        .string()
+        .transform(strMaterials => JSON.parse(strMaterials) as string[])
+        .optional(),
     }),
   }),
 };
