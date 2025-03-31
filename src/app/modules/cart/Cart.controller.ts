@@ -4,7 +4,7 @@ import { CartServices } from './Cart.service';
 
 export const CartControllers = {
   add: catchAsync(async ({ params, user }, res) => {
-    await CartServices.add(params.bookId, user!._id!);
+    await CartServices.add(params.productId, user!._id!);
 
     serveResponse(res, {
       message: 'Cart added successfully',
@@ -12,16 +12,16 @@ export const CartControllers = {
   }),
 
   retrieve: catchAsync(async ({ user }, res) => {
-    const books = await CartServices.retrieve(user!._id!);
+    const products = (await CartServices.retrieve(user!._id!))?.products ?? [];
 
     serveResponse(res, {
       message: 'Cart retrieved successfully',
-      data: books,
+      data: products,
     });
   }),
 
   remove: catchAsync(async ({ params, user }, res) => {
-    await CartServices.remove(params.bookId, user!._id!);
+    await CartServices.remove(params.productId, user!._id!);
 
     serveResponse(res, {
       message: 'Cart removed successfully',

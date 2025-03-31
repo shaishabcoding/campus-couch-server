@@ -8,10 +8,10 @@ const cartSchema = new Schema<TCart>(
       ref: 'User',
       required: true,
     },
-    books: {
+    products: {
       type: [Schema.Types.ObjectId],
-      ref: 'Book',
-      required: true,
+      ref: 'Product',
+      default: [],
     },
   },
   {
