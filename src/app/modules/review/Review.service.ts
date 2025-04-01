@@ -82,7 +82,7 @@ export const ReviewServices = {
 
     switch (type) {
       case 'product':
-        return await Product.findByIdAndUpdate(_id, { rating }, { session });
+        return Product.findByIdAndUpdate(_id, { rating }, { session });
     }
   },
 

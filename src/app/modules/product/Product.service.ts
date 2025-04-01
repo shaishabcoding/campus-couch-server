@@ -4,7 +4,7 @@ import { Product } from './Product.model';
 
 export const ProductServices = {
   async create(productData: TProduct) {
-    return await Product.create(productData);
+    return Product.create(productData);
   },
 
   async edit(productId: string, productData: Partial<TProduct>) {
@@ -42,7 +42,7 @@ export const ProductServices = {
   },
 
   async retrieve(productId: string) {
-    return await Product.findById(productId);
+    return Product.findById(productId);
   },
 
   async delete(productId: string) {

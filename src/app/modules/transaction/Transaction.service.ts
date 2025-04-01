@@ -3,7 +3,7 @@ import Transaction from './Transaction.model';
 
 export const TransactionServices = {
   async create(transactionData: TTransaction) {
-    return await Transaction.create(transactionData);
+    return Transaction.create(transactionData);
   },
 
   async retrieve({ page = 1, limit = 10 }: Record<string, any>) {
