@@ -6,6 +6,7 @@ const bundleSchema = new Schema(
       type: Types.ObjectId,
       ref: 'User',
       required: true,
+      select: false,
     },
     name: {
       type: String,

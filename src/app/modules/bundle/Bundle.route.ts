@@ -29,6 +29,12 @@ admin.patch(
   BundleControllers.edit,
 );
 
+admin.delete(
+  '/:bundleId/delete',
+  purifyRequest(QueryValidations.exists('bundleId', Bundle)),
+  BundleControllers.delete,
+);
+
 const user = Router();
 
 user.get('/', purifyRequest(QueryValidations.list), BundleControllers.list);

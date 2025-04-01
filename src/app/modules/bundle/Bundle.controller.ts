@@ -23,11 +23,25 @@ export const BundleControllers = {
   }),
 
   edit: catchAsync(async ({ params, body }, res) => {
-    const data = await BundleServices.edit(params.bundleId, body);
+    const bundleData: TBundle = {
+      isBuyable: !!body.price,
+      isRentable: !!body.rentPrice,
+      ...body,
+    };
+
+    const data = await BundleServices.edit(params.bundleId, bundleData);
 
     serveResponse(res, {
       message: 'Bundle updated successfully!',
       data,
+    });
+  }),
+
+  delete: catchAsync(async ({ params }, res) => {
+    await BundleServices.delete(params.bundleId);
+
+    serveResponse(res, {
+      message: 'Bundle deleted successfully!',
     });
   }),
 

@@ -21,6 +21,14 @@ export const BundleServices = {
     return bundle;
   },
 
+  async delete(bundleId: string) {
+    const bundle = (await Bundle.findByIdAndDelete(bundleId))!;
+
+    bundle.images?.forEach(deleteFile);
+
+    return bundle;
+  },
+
   async list({ page, limit }: Record<string, any>) {
     const bundles = await Bundle.find()
       .skip((page - 1) * limit)
