@@ -5,6 +5,9 @@ import { BundleValidations } from './Bundle.validation';
 import imageUploader from '../../middlewares/imageUploader';
 import { QueryValidations } from '../query/Query.validation';
 import Bundle from './Bundle.model';
+import { ReviewControllers } from '../review/Review.controller';
+import { EUserRole } from '../user/User.enum';
+import auth from '../../middlewares/auth';
 
 const admin = Router();
 
@@ -43,6 +46,22 @@ user.get(
   '/:bundleId',
   purifyRequest(QueryValidations.exists('bundleId', Bundle)),
   BundleControllers.retrieve,
+);
+
+user.get(
+  '/:bundleId/reviews',
+  purifyRequest(
+    QueryValidations.exists('bundleId', Bundle),
+    QueryValidations.list,
+  ),
+  ReviewControllers.list,
+);
+
+user.patch(
+  '/:bundleId/review',
+  auth(EUserRole.USER, EUserRole.ADMIN),
+  purifyRequest(QueryValidations.exists('bundleId', Bundle)),
+  ReviewControllers.store,
 );
 
 export const BundleRoutes = {
