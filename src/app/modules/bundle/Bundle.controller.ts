@@ -13,4 +13,13 @@ export const BundleControllers = {
       data,
     });
   }),
+
+  edit: catchAsync(async ({ params, body }, res) => {
+    const data = await BundleServices.edit(params.bundleId, body);
+
+    serveResponse(res, {
+      message: 'Bundle updated successfully!',
+      data,
+    });
+  }),
 };
