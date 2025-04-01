@@ -39,6 +39,12 @@ const user = Router();
 
 user.get('/', purifyRequest(QueryValidations.list), BundleControllers.list);
 
+user.get(
+  '/:bundleId',
+  purifyRequest(QueryValidations.exists('bundleId', Bundle)),
+  BundleControllers.retrieve,
+);
+
 export const BundleRoutes = {
   admin,
   user,

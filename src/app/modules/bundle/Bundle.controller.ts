@@ -54,4 +54,13 @@ export const BundleControllers = {
       meta,
     });
   }),
+
+  retrieve: catchAsync(async ({ params }, res) => {
+    const data = await BundleServices.retrieve(params.bundleId);
+
+    serveResponse(res, {
+      message: 'Bundle retrieved successfully!',
+      data,
+    });
+  }),
 };

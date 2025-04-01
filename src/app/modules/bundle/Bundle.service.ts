@@ -48,4 +48,8 @@ export const BundleServices = {
       },
     };
   },
+
+  async retrieve(bundleId: string) {
+    return Bundle.findById(bundleId).populate('products', 'name images');
+  },
 };
