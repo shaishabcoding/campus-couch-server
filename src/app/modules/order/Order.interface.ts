@@ -2,29 +2,26 @@ import { Types } from 'mongoose';
 import { EOrderState } from './Order.enum';
 
 export type TOrder = {
-  _id?: Types.ObjectId;
   details: {
-    book: Types.ObjectId;
+    product: Types.ObjectId;
     quantity: number;
+    rentalLength?: number;
   }[];
-  customer: TCustomer;
   user: Types.ObjectId;
-  transaction?: Types.ObjectId;
-  amount: number;
+  customer: TCustomer;
   state: EOrderState;
-  createdAt?: Date;
-  updatedAt?: Date;
+  transaction?: Types.ObjectId;
+  createdAt: Date;
+  updatedAt: Date;
 };
 
 export type TCustomer = {
+  email: string;
   name: string;
-  email?: string;
-  phone?: string;
   address: {
     country: string;
-    address: string;
-    zip: string;
     city: string;
-    apartment?: string;
+    zip: string;
+    street: string;
   };
 };
