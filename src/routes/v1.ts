@@ -11,6 +11,7 @@ import { ProductRoutes } from '../app/modules/product/Product.route';
 import ReviewRoutes from '../app/modules/review/Review.route';
 import { CartRoutes } from '../app/modules/cart/Cart.route';
 import { WishlistRoutes } from '../app/modules/wishlist/Wishlist.route';
+import { BundleRoutes } from '../app/modules/bundle/Bundle.route';
 
 const routes: TRoute[] = [
   {
@@ -30,6 +31,10 @@ const routes: TRoute[] = [
   {
     path: '/products',
     route: ProductRoutes.user,
+  },
+  {
+    path: '/bundles',
+    route: BundleRoutes.user,
   },
   {
     path: '/reviews',

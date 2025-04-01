@@ -20,4 +20,24 @@ export const BundleServices = {
 
     return bundle;
   },
+
+  async list({ page, limit }: Record<string, any>) {
+    const bundles = await Bundle.find()
+      .skip((page - 1) * limit)
+      .limit(limit);
+
+    const total = await Bundle.countDocuments();
+
+    return {
+      bundles,
+      meta: {
+        pagination: {
+          page,
+          limit,
+          total,
+          totalPage: Math.ceil(total / limit),
+        },
+      },
+    };
+  },
 };

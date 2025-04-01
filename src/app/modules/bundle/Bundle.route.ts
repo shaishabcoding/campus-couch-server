@@ -29,6 +29,11 @@ admin.patch(
   BundleControllers.edit,
 );
 
+const user = Router();
+
+user.get('/', purifyRequest(QueryValidations.list), BundleControllers.list);
+
 export const BundleRoutes = {
   admin,
+  user,
 };

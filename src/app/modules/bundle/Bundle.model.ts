@@ -15,15 +15,10 @@ const bundleSchema = new Schema(
       type: String,
       required: true,
     },
-    images: {
-      type: [String],
-      required: true,
-    },
+    images: [String],
     products: {
       type: [Types.ObjectId],
       ref: 'Product',
-      required: true,
-      default: [],
     },
     price: {
       type: Number,
@@ -39,10 +34,7 @@ const bundleSchema = new Schema(
       type: Boolean,
       required: true,
     },
-    notes: {
-      type: [String],
-      required: true,
-    },
+    notes: [String],
     rating: {
       type: Number,
       required: true,

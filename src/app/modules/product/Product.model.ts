@@ -13,10 +13,7 @@ const productSchema = new Schema<TProduct>(
       type: String,
       required: true,
     },
-    images: {
-      type: [String],
-      required: true,
-    },
+    images: [String],
     description: {
       type: String,
       required: true,
@@ -44,10 +41,7 @@ const productSchema = new Schema<TProduct>(
       required: true,
       min: 0,
     },
-    notes: {
-      type: [String],
-      required: true,
-    },
+    notes: [String],
     refProduct: {
       type: Schema.Types.ObjectId,
       ref: 'Product',
