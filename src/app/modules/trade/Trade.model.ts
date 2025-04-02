@@ -32,7 +32,7 @@ const tradeSchema = new Schema<TTrade>(
       required: true,
       min: 1,
     },
-    customer: customerSchema,
+    seller: customerSchema,
     state: {
       type: String,
       required: true,

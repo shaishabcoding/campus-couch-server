@@ -11,7 +11,7 @@ export const TradeValidations = {
       category: z.string().min(1, 'Category is required'),
       condition: z.string().min(1, 'Condition is required'),
       price: z.coerce.number().min(1, 'Price must be at least 1'),
-      customer: z
+      seller: z
         .string()
         .transform(
           strCustomer => strCustomer && (JSON.parse(strCustomer) as TCustomer),

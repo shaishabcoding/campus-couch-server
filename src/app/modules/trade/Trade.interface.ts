@@ -11,7 +11,7 @@ export type TTrade = {
   category: string;
   condition: string;
   price: number;
-  customer: TCustomer;
+  seller: TCustomer;
   state: ETradeState;
   createdAt?: Date;
   updatedAt?: Date;
