@@ -9,6 +9,7 @@ export type TOrder = {
   }[];
   user: Types.ObjectId;
   customer: TCustomer;
+  amount: number;
   state: EOrderState;
   transaction?: Types.ObjectId;
   createdAt: Date;
@@ -16,8 +17,8 @@ export type TOrder = {
 };
 
 export type TCustomer = {
-  email: string;
   name: string;
+  contact: string;
   address: {
     country: string;
     city: string;

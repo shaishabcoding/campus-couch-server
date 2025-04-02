@@ -5,7 +5,7 @@ import auth from '../app/middlewares/auth';
 import { EUserRole } from '../app/modules/user/User.enum';
 import { TRoute } from '../types/route.types';
 import AdminRoutes from '../app/modules/admin/Admin.routes';
-// import { OrderRoutes } from '../app/modules/order/Order.route';
+import { OrderRoutes } from '../app/modules/order/Order.route';
 import { PaymentRoutes } from '../app/modules/payment/Payment.route';
 import { ProductRoutes } from '../app/modules/product/Product.route';
 import ReviewRoutes from '../app/modules/review/Review.route';
@@ -41,11 +41,11 @@ const routes: TRoute[] = [
     middlewares: [auth(EUserRole.USER, EUserRole.ADMIN)],
     route: ReviewRoutes,
   },
-  // {
-  //   path: '/orders',
-  //   middlewares: [auth(EUserRole.USER, EUserRole.ADMIN)],
-  //   route: OrderRoutes,
-  // },
+  {
+    path: '/orders',
+    middlewares: [auth(EUserRole.USER, EUserRole.ADMIN)],
+    route: OrderRoutes,
+  },
   {
     path: '/payment',
     route: PaymentRoutes,
