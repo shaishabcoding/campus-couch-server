@@ -12,6 +12,7 @@ import ReviewRoutes from '../app/modules/review/Review.route';
 import { CartRoutes } from '../app/modules/cart/Cart.route';
 import { WishlistRoutes } from '../app/modules/wishlist/Wishlist.route';
 import { BundleRoutes } from '../app/modules/bundle/Bundle.route';
+import { TradeRoutes } from '../app/modules/trade/Trade.route';
 
 const routes: TRoute[] = [
   {
@@ -63,7 +64,7 @@ const routes: TRoute[] = [
   {
     path: '/trades',
     middlewares: [auth(EUserRole.USER, EUserRole.ADMIN)],
-    route: BundleRoutes.user,
+    route: TradeRoutes.user,
   },
 ];
 

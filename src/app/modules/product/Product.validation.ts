@@ -21,14 +21,17 @@ export const ProductValidations = {
       stock: z.coerce.number().min(1, 'Stock must be at least 1'),
       notes: z
         .string()
-        .transform(strNotes => JSON.parse(strNotes) as string[])
+        .transform(strNotes => strNotes && (JSON.parse(strNotes) as string[]))
         .optional(),
       rating: z.coerce.number().min(1).max(5).optional(),
       color: z.string().optional(),
       size: z.string().optional(),
       materials: z
         .string()
-        .transform(strMaterials => JSON.parse(strMaterials) as string[])
+        .transform(
+          strMaterials =>
+            strMaterials && (JSON.parse(strMaterials) as string[]),
+        )
         .optional(),
     }),
   }),
@@ -53,14 +56,17 @@ export const ProductValidations = {
       stock: z.coerce.number().min(0).optional(),
       notes: z
         .string()
-        .transform(strNotes => JSON.parse(strNotes) as string[])
+        .transform(strNotes => strNotes && (JSON.parse(strNotes) as string[]))
         .optional(),
       refProduct: z.string().optional(),
       color: z.string().optional(),
       size: z.string().optional(),
       materials: z
         .string()
-        .transform(strMaterials => JSON.parse(strMaterials) as string[])
+        .transform(
+          strMaterials =>
+            strMaterials && (JSON.parse(strMaterials) as string[]),
+        )
         .optional(),
     }),
   }),

@@ -24,7 +24,7 @@ export const BundleValidations = {
       isRentable: z.boolean().optional(),
       notes: z
         .string()
-        .transform(strNotes => JSON.parse(strNotes) as string[])
+        .transform(strNotes => strNotes && (JSON.parse(strNotes) as string[]))
         .optional(),
       rating: z.coerce.number().min(1).max(5).default(5),
     }),
@@ -48,7 +48,7 @@ export const BundleValidations = {
       isRentable: z.boolean().optional(),
       notes: z
         .string()
-        .transform(strNotes => JSON.parse(strNotes) as string[])
+        .transform(strNotes => strNotes && (JSON.parse(strNotes) as string[]))
         .optional(),
       rating: z.coerce.number().min(1).max(5).optional(),
     }),
