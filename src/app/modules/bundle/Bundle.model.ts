@@ -1,9 +1,10 @@
-import { model, Schema, Types } from 'mongoose';
+import { model, Schema } from 'mongoose';
+import { TBundle } from './Bundle.interface';
 
-const bundleSchema = new Schema(
+const bundleSchema = new Schema<TBundle>(
   {
     admin: {
-      type: Types.ObjectId,
+      type: Schema.Types.ObjectId,
       ref: 'User',
       required: true,
       select: false,
@@ -18,7 +19,7 @@ const bundleSchema = new Schema(
     },
     images: [String],
     products: {
-      type: [Types.ObjectId],
+      type: [Schema.Types.ObjectId],
       ref: 'Product',
     },
     price: {
@@ -48,6 +49,6 @@ const bundleSchema = new Schema(
   },
 );
 
-const Bundle = model('Bundle', bundleSchema);
+const Bundle = model<TBundle>('Bundle', bundleSchema);
 
 export default Bundle;

@@ -30,4 +30,12 @@ export const OrderValidations = {
       customer: customerSchema,
     }),
   }),
+
+  bundleCheckout: z.object({
+    body: z.object({
+      rentalLength: z.number().optional(),
+      quantity: z.coerce.number().default(1),
+      customer: customerSchema,
+    }),
+  }),
 };

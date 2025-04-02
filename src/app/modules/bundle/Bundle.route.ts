@@ -8,6 +8,7 @@ import Bundle from './Bundle.model';
 import { ReviewControllers } from '../review/Review.controller';
 import { EUserRole } from '../user/User.enum';
 import auth from '../../middlewares/auth';
+import { OrderControllers } from '../order/Order.controller';
 
 const admin = Router();
 
@@ -62,6 +63,13 @@ user.patch(
   auth(EUserRole.USER, EUserRole.ADMIN),
   purifyRequest(QueryValidations.exists('bundleId', Bundle)),
   ReviewControllers.store,
+);
+
+user.post(
+  '/:bundleId/checkout',
+  auth(EUserRole.USER, EUserRole.ADMIN),
+  purifyRequest(QueryValidations.exists('bundleId', Bundle)),
+  OrderControllers.checkout,
 );
 
 export const BundleRoutes = {

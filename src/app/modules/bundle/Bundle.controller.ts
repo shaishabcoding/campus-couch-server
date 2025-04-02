@@ -23,11 +23,12 @@ export const BundleControllers = {
   }),
 
   edit: catchAsync(async ({ params, body }, res) => {
-    const bundleData: TBundle = {
-      isBuyable: !!body.price,
-      isRentable: !!body.rentPrice,
-      ...body,
-    };
+    const bundleData: Partial<TBundle> = {};
+
+    if (body.price) bundleData.isBuyable = true;
+    if (body.rentPrice) bundleData.isRentable = true;
+
+    Object.assign(bundleData, body);
 
     const data = await BundleServices.edit(params.bundleId, bundleData);
 
