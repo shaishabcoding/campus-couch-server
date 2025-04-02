@@ -9,7 +9,7 @@ const addressSchema = z.object({
   street: z.string().min(1, 'Street is required'),
 });
 
-const customerSchema = z.object({
+export const customerSchema = z.object({
   name: z.string().min(1, 'Name is required'),
   contact: z.string().min(1, 'Contact is required'),
   address: addressSchema,

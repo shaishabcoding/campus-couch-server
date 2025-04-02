@@ -68,14 +68,6 @@ const config = {
     email: env('admin email', email),
     password: env('admin password', genSecret(4)),
   },
-  auth: {
-    apple: {
-      client: env('apple client id', ''),
-    },
-  },
-  chatgpt: {
-    key: env('chatgpt key', ''),
-  },
 };
 
 export default config;

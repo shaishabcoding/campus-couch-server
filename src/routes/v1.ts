@@ -60,6 +60,11 @@ const routes: TRoute[] = [
     middlewares: [auth(EUserRole.USER, EUserRole.ADMIN)],
     route: WishlistRoutes,
   },
+  {
+    path: '/trades',
+    middlewares: [auth(EUserRole.USER, EUserRole.ADMIN)],
+    route: BundleRoutes.user,
+  },
 ];
 
 export default Router().inject(routes);

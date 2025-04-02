@@ -2,7 +2,7 @@ import { model, Schema, Types } from 'mongoose';
 import { EOrderState } from './Order.enum';
 import { TCustomer, TOrder } from './Order.interface';
 
-const customerSchema = new Schema<TCustomer>(
+export const customerSchema = new Schema<TCustomer>(
   {
     name: {
       type: String,
