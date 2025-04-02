@@ -5,6 +5,12 @@ import { ETransactionType } from './Transaction.enum';
 const transactionSchema = new Schema<TTransaction>(
   {
     transaction_id: String,
+    order: {
+      type: Schema.Types.ObjectId,
+      required: true,
+      select: false,
+      ref: 'Order',
+    },
     user: {
       type: Schema.Types.ObjectId,
       required: true,
