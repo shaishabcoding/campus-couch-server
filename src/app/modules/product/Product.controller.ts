@@ -25,11 +25,12 @@ export const ProductControllers = {
   }),
 
   edit: catchAsync(async ({ params, body }, res) => {
-    const productData: TProduct = {
-      isBuyable: !!body.price,
-      isRentable: !!body.rentPrice,
-      ...body,
-    };
+    const productData: Partial<TProduct> = {};
+
+    if (body.price) productData.isBuyable = true;
+    if (body.rentPrice) productData.isRentable = true;
+
+    Object.assign(productData, body);
 
     const data = await ProductServices.edit(params.productId, productData);
 
