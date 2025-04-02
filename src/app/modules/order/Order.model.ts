@@ -2,55 +2,65 @@ import { model, Schema, Types } from 'mongoose';
 import { EOrderState } from './Order.enum';
 import { TCustomer, TOrder } from './Order.interface';
 
-const customerSchema = new Schema<TCustomer>({
-  name: {
-    type: String,
-    required: true,
-  },
-  contact: {
-    type: String,
-    required: true,
-  },
-  address: {
-    type: {
-      country: {
-        type: String,
-        required: true,
-      },
-      city: {
-        type: String,
-        required: true,
-      },
-      zip: {
-        type: String,
-        required: true,
-      },
-      street: {
-        type: String,
-        required: true,
-      },
+const customerSchema = new Schema<TCustomer>(
+  {
+    name: {
+      type: String,
+      required: true,
     },
-    required: true,
+    contact: {
+      type: String,
+      required: true,
+    },
+    address: {
+      type: {
+        country: {
+          type: String,
+          required: true,
+        },
+        city: {
+          type: String,
+          required: true,
+        },
+        zip: {
+          type: String,
+          required: true,
+        },
+        street: {
+          type: String,
+          required: true,
+        },
+      },
+      required: true,
+      _id: false,
+    },
   },
-});
+  {
+    _id: false,
+  },
+);
 
 const orderSchema = new Schema<TOrder>(
   {
-    details: [
-      {
-        product: {
-          type: Schema.Types.ObjectId,
-          ref: 'Product',
-          required: true,
+    name: String,
+    details: {
+      type: [
+        {
+          product: {
+            type: Schema.Types.ObjectId,
+            ref: 'Product',
+            required: true,
+          },
+          quantity: {
+            type: Number,
+            required: true,
+            min: 1,
+          },
+          rentalLength: Number,
         },
-        quantity: {
-          type: Number,
-          required: true,
-          min: 1,
-        },
-        rentalLength: Number,
-      },
-    ],
+      ],
+      _id: false,
+    },
     user: {
       type: Schema.Types.ObjectId,
       ref: 'User',

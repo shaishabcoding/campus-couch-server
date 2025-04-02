@@ -9,19 +9,17 @@ import Bundle from '../bundle/Bundle.model';
 
 export const OrderServices = {
   async checkout({ details, customer }: TOrder, user: Types.ObjectId) {
-    const productIds = details.map(detail => detail.product);
+    const productIds = details.map(({ product }) => product);
 
     const products = await Product.find(
-      {
-        _id: { $in: productIds },
-      },
-      'price rentPrice',
+      { _id: { $in: productIds } },
+      'name price rentPrice',
     );
 
     const productsMap = new Map(
-      products.map(product => [
-        product._id.toString(),
-        { price: product.price, rentPrice: product.rentPrice },
+      products.map(({ _id, price, rentPrice }) => [
+        _id.toString(),
+        { price, rentPrice },
       ]),
     );
 
@@ -40,29 +38,35 @@ export const OrderServices = {
         },
         0,
       );
+
+      if (amount < 1) throw Error;
     } catch {
       throw new ServerError(StatusCodes.BAD_REQUEST, 'Order is not available');
     }
 
-    if (amount < 1)
-      throw new ServerError(StatusCodes.BAD_REQUEST, 'Invalid order amount');
-
     const order = await Order.findOneAndUpdate(
       { user, state: EOrderState.PENDING },
-      { $set: { details, customer, amount, state: EOrderState.PENDING } },
+      {
+        $set: {
+          name: products[0].name,
+          details,
+          customer,
+          amount,
+          state: EOrderState.PENDING,
+        },
+      },
       { upsert: true, new: true },
-    ).select('_id');
+    ).populate('details.product', 'name');
 
-    return { orderId: order._id, amount };
+    return { order, amount };
   },
 
   async bundleCheckout(
     { bundleId, quantity, rentalLength, customer }: any,
     user: Types.ObjectId,
   ) {
-    const { products, rentPrice, price } = (await Bundle.findById(
-      bundleId,
-    ).select('products rentPrice price'))!;
+    const { products, rentPrice, price, name } =
+      (await Bundle.findById(bundleId).select('-images'))!;
 
     const details = products.map(productId => ({
       product: productId,
@@ -74,19 +78,18 @@ export const OrderServices = {
 
     try {
       amount = (rentalLength ? rentPrice! * rentalLength : price!) * quantity;
+
+      if (amount < 1) throw Error;
     } catch {
       throw new ServerError(StatusCodes.BAD_REQUEST, 'Order is not available');
     }
 
-    if (amount < 1)
-      throw new ServerError(StatusCodes.BAD_REQUEST, 'Invalid order amount');
-
     const order = await Order.findOneAndUpdate(
       { user, state: EOrderState.PENDING },
-      { $set: { details, customer, amount, state: EOrderState.PENDING } },
+      { $set: { name, details, customer, amount, state: EOrderState.PENDING } },
       { upsert: true, new: true },
-    ).select('_id');
+    ).populate('details.product', 'name');
 
-    return { orderId: order._id, amount };
+    return { order, amount };
   },
 };

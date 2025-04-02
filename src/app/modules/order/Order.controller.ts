@@ -6,12 +6,12 @@ import { OrderServices } from './Order.service';
 export const OrderControllers = {
   checkout: catchAsync(
     async ({ body, user, query, params: { bundleId } }, res) => {
-      const { orderId, amount } = !bundleId
+      const { order, amount } = !bundleId
         ? await OrderServices.checkout(body, user!._id!)
         : await OrderServices.bundleCheckout({ ...body, bundleId }, user!._id!);
 
       const checkout_url = await PaymentServices.create({
-        name: orderId.toString(),
+        name: order._id.toString(),
         amount,
         method: query.method,
       });
@@ -19,7 +19,7 @@ export const OrderControllers = {
       serveResponse(res, {
         message: 'Order created successfully!',
         meta: {
-          orderId,
+          order,
         },
         data: {
           checkout_url,
