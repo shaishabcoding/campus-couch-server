@@ -56,7 +56,9 @@ export const OrderServices = {
         },
       },
       { upsert: true, new: true },
-    ).populate('details.product', 'name');
+    )
+      .select('customer details name amount')
+      .populate('details.product', 'name');
 
     return { order, amount };
   },
@@ -88,7 +90,9 @@ export const OrderServices = {
       { user, state: EOrderState.PENDING },
       { $set: { name, details, customer, amount, state: EOrderState.PENDING } },
       { upsert: true, new: true },
-    ).populate('details.product', 'name');
+    )
+      .select('customer details name amount')
+      .populate('details.product', 'name');
 
     return { order, amount };
   },
