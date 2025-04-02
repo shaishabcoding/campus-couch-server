@@ -43,4 +43,23 @@ export const OrderControllers = {
       data,
     });
   }),
+
+  list: catchAsync(async ({ query, user }, res) => {
+    const { meta, orders } = await OrderServices.list(query, user!);
+
+    serveResponse(res, {
+      message: 'Orders retrieved successfully!',
+      meta,
+      data: orders,
+    });
+  }),
+
+  retrieve: catchAsync(async ({ user, params }, res) => {
+    const data = await OrderServices.retrieve(params.orderId, user!);
+
+    serveResponse(res, {
+      message: 'Order retrieved successfully!',
+      data,
+    });
+  }),
 };

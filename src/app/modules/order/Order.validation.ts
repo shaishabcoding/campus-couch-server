@@ -40,9 +40,14 @@ export const OrderValidations = {
     }),
   }),
 
-  state: z.object({
-    params: z.object({
-      state: z.nativeEnum(EOrderState),
+  state: (key: string, optional = false) =>
+    z.object({
+      [key]: z
+        .object({
+          state: optional
+            ? z.nativeEnum(EOrderState).optional()
+            : z.nativeEnum(EOrderState),
+        })
+        .optional(),
     }),
-  }),
 };

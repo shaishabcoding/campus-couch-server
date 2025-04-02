@@ -1,4 +1,4 @@
-import { Types } from 'mongoose';
+import { RootFilterQuery, Types } from 'mongoose';
 import { TOrder } from './Order.interface';
 import { Product } from '../product/Product.model';
 import Order from './Order.model';
@@ -6,6 +6,8 @@ import { EOrderState } from './Order.enum';
 import ServerError from '../../../errors/ServerError';
 import { StatusCodes } from 'http-status-codes';
 import Bundle from '../bundle/Bundle.model';
+import { EUserRole } from '../user/User.enum';
+import { TUser } from '../user/User.interface';
 
 export const OrderServices = {
   async checkout({ details, customer }: TOrder, user: Types.ObjectId) {
@@ -100,6 +102,50 @@ export const OrderServices = {
   async changeState(orderId: string, state: EOrderState) {
     return await Order.findByIdAndUpdate(orderId, { state }, { new: true })
       .populate('details.product', 'name images')
+      .populate(
+        'transaction',
+        'transaction_id amount payment_method createdAt',
+      );
+  },
+
+  async list({ state, page, limit }: Record<any, any>, user: TUser) {
+    const filter: RootFilterQuery<TOrder> = state ? { state } : {};
+
+    if (user.role !== EUserRole.ADMIN) filter.user = user._id;
+
+    const orders = await Order.find(filter)
+      .skip((page - 1) * limit)
+      .limit(limit)
+      .populate('details.product', 'title images')
+      .populate(
+        'transaction',
+        'transaction_id amount payment_method createdAt',
+      );
+
+    const total = await Order.countDocuments(filter);
+
+    return {
+      meta: {
+        pagination: {
+          page,
+          limit,
+          total,
+          totalPage: Math.ceil(total / limit),
+        },
+      },
+      orders,
+    };
+  },
+
+  async retrieve(orderId: string, user: TUser) {
+    const filter: RootFilterQuery<TOrder> = {
+      _id: orderId,
+    };
+
+    if (user.role !== EUserRole.ADMIN) filter.user = user._id;
+
+    return await Order.findOne(filter)
+      .populate('details.product', 'title images')
       .populate(
         'transaction',
         'transaction_id amount payment_method createdAt',

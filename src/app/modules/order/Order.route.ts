@@ -7,6 +7,18 @@ import Order from './Order.model';
 
 const router = Router();
 
+router.get(
+  '/',
+  purifyRequest(QueryValidations.list, OrderValidations.state('query', true)),
+  OrderControllers.list,
+);
+
+router.get(
+  '/:orderId',
+  purifyRequest(QueryValidations.exists('orderId', Order)),
+  OrderControllers.retrieve,
+);
+
 router.post(
   '/checkout',
   purifyRequest(OrderValidations.checkout),
@@ -17,7 +29,7 @@ router.patch(
   '/:orderId/:state',
   purifyRequest(
     QueryValidations.exists('orderId', Order),
-    OrderValidations.state,
+    OrderValidations.state('params'),
   ),
   OrderControllers.changeState,
 );
