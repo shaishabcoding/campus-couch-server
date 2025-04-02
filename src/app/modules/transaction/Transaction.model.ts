@@ -1,11 +1,10 @@
 import { model, Schema } from 'mongoose';
 import { TTransaction } from './Transaction.interface';
+import { ETransactionType } from './Transaction.enum';
 
 const transactionSchema = new Schema<TTransaction>(
   {
-    transaction_id: {
-      type: String,
-    },
+    transaction_id: String,
     user: {
       type: Schema.Types.ObjectId,
       required: true,
@@ -21,10 +20,15 @@ const transactionSchema = new Schema<TTransaction>(
       required: true,
       trim: true,
     },
-    subscription: String,
+    transaction_type: {
+      type: String,
+      enum: Object.values(ETransactionType),
+      required: true,
+    },
   },
   {
     timestamps: true,
+    versionKey: false,
   },
 );
 
