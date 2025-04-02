@@ -8,8 +8,14 @@ export const ProductValidations = {
       description: z.string().min(1, 'Description is required'),
       price: z.coerce.number().optional(),
       rentPrice: z.coerce.number().optional(),
-      isRentable: z.boolean().optional(),
-      isBuyable: z.boolean().optional(),
+      isRentable: z
+        .string()
+        .transform(v => v === 'true')
+        .optional(),
+      isBuyable: z
+        .string()
+        .transform(v => v === 'true')
+        .optional(),
       category: z.string().optional(),
       type: z.string().optional(),
       stock: z.coerce.number().min(1, 'Stock must be at least 1'),
@@ -34,8 +40,14 @@ export const ProductValidations = {
       description: z.string().optional(),
       price: z.coerce.number().optional(),
       rentPrice: z.coerce.number().optional(),
-      isRentable: z.boolean().optional(),
-      isBuyable: z.boolean().optional(),
+      isRentable: z
+        .string()
+        .transform(v => v === 'true')
+        .optional(),
+      isBuyable: z
+        .string()
+        .transform(v => v === 'true')
+        .optional(),
       category: z.string().optional(),
       type: z.string().optional(),
       stock: z.coerce.number().min(0).optional(),
