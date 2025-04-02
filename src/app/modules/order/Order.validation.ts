@@ -1,6 +1,7 @@
 import { z } from 'zod';
 import { exists } from '../../../util/db/exists';
 import { Product } from '../product/Product.model';
+import { EOrderState } from './Order.enum';
 
 const addressSchema = z.object({
   country: z.string().min(1, 'Country is required'),
@@ -36,6 +37,12 @@ export const OrderValidations = {
       rentalLength: z.number().optional(),
       quantity: z.coerce.number().default(1),
       customer: customerSchema,
+    }),
+  }),
+
+  state: z.object({
+    params: z.object({
+      state: z.nativeEnum(EOrderState),
     }),
   }),
 };

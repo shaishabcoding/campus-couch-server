@@ -1,6 +1,8 @@
 import catchAsync from '../../../util/server/catchAsync';
 import serveResponse from '../../../util/server/serveResponse';
 import { PaymentServices } from '../payment/Payment.service';
+import { EUserRole } from '../user/User.enum';
+import { EOrderState } from './Order.enum';
 import { OrderServices } from './Order.service';
 
 export const OrderControllers = {
@@ -27,4 +29,18 @@ export const OrderControllers = {
       });
     },
   ),
+
+  changeState: catchAsync(async ({ params, user }, res) => {
+    if (user?.role !== EUserRole.ADMIN) params.state = EOrderState.CANCEL;
+
+    const data = await OrderServices.changeState(
+      params.orderId,
+      params.state as EOrderState,
+    );
+
+    serveResponse(res, {
+      message: `Order ${params.state} successfully!`,
+      data,
+    });
+  }),
 };

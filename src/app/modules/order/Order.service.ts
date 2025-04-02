@@ -96,4 +96,13 @@ export const OrderServices = {
 
     return { order, amount };
   },
+
+  async changeState(orderId: string, state: EOrderState) {
+    return await Order.findByIdAndUpdate(orderId, { state }, { new: true })
+      .populate('details.product', 'name images')
+      .populate(
+        'transaction',
+        'transaction_id amount payment_method createdAt',
+      );
+  },
 };
