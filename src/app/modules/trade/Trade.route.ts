@@ -7,9 +7,21 @@ import { QueryValidations } from '../query/Query.validation';
 import { OrderValidations } from '../order/Order.validation';
 import Trade from './Trade.model';
 
-const user = Router();
+const router = Router();
 
-user.post(
+router.get(
+  '/',
+  purifyRequest(QueryValidations.list, OrderValidations.state('query', true)),
+  TradeControllers.list,
+);
+
+router.get(
+  '/:tradeId',
+  purifyRequest(QueryValidations.exists('tradeId', Trade)),
+  TradeControllers.retrieve,
+);
+
+router.post(
   '/create',
   imageUploader({
     width: 700,
@@ -19,7 +31,7 @@ user.post(
   TradeControllers.create,
 );
 
-user.patch(
+router.patch(
   '/:tradeId/:state',
   purifyRequest(
     QueryValidations.exists('tradeId', Trade),
@@ -28,4 +40,4 @@ user.patch(
   TradeControllers.changeState,
 );
 
-export const TradeRoutes = { user };
+export const TradeRoutes = router;

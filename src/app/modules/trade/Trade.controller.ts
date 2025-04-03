@@ -28,4 +28,23 @@ export const TradeControllers = {
       data,
     });
   }),
+
+  list: catchAsync(async ({ query, user }, res) => {
+    const { meta, trades } = await TradeServices.list(query, user!);
+
+    serveResponse(res, {
+      message: 'Trades retrieved successfully!',
+      meta,
+      data: trades,
+    });
+  }),
+
+  retrieve: catchAsync(async ({ user, params }, res) => {
+    const data = await TradeServices.retrieve(params.tradeId, user!);
+
+    serveResponse(res, {
+      message: 'Trade retrieved successfully!',
+      data,
+    });
+  }),
 };

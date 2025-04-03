@@ -64,7 +64,7 @@ const routes: TRoute[] = [
   {
     path: '/trades',
     middlewares: [auth(EUserRole.USER, EUserRole.ADMIN)],
-    route: TradeRoutes.user,
+    route: TradeRoutes,
   },
 ];
 
