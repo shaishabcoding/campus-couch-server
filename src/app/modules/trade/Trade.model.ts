@@ -1,7 +1,7 @@
 import { model, Schema } from 'mongoose';
 import { TTrade } from './Trade.interface';
 import { customerSchema } from '../order/Order.model';
-import { ETradeState } from './Trade.enum';
+import { EOrderState } from '../order/Order.enum';
 
 const tradeSchema = new Schema<TTrade>(
   {
@@ -36,8 +36,8 @@ const tradeSchema = new Schema<TTrade>(
     state: {
       type: String,
       required: true,
-      enum: Object.values(ETradeState),
-      default: ETradeState.PENDING,
+      enum: Object.values(EOrderState),
+      default: EOrderState.PENDING,
     },
   },
   {

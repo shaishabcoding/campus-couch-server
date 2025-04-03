@@ -100,7 +100,7 @@ export const OrderServices = {
   },
 
   async changeState(orderId: string, state: EOrderState) {
-    return await Order.findByIdAndUpdate(orderId, { state }, { new: true })
+    return Order.findByIdAndUpdate(orderId, { state }, { new: true })
       .populate('details.product', 'name images')
       .populate(
         'transaction',
@@ -144,7 +144,7 @@ export const OrderServices = {
 
     if (user.role !== EUserRole.ADMIN) filter.user = user._id;
 
-    return await Order.findOne(filter)
+    return Order.findOne(filter)
       .populate('details.product', 'title images')
       .populate(
         'transaction',

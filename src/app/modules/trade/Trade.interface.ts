@@ -1,6 +1,6 @@
 import { Types } from 'mongoose';
 import { TCustomer } from '../order/Order.interface';
-import { ETradeState } from './Trade.enum';
+import { EOrderState } from '../order/Order.enum';
 
 export type TTrade = {
   _id?: Types.ObjectId;
@@ -12,7 +12,7 @@ export type TTrade = {
   condition: string;
   price: number;
   seller: TCustomer;
-  state: ETradeState;
+  state: EOrderState;
   createdAt?: Date;
   updatedAt?: Date;
 };
