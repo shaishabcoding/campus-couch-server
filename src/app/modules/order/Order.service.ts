@@ -130,7 +130,7 @@ export const OrderServices = {
           page,
           limit,
           total,
-          totalPage: Math.ceil(total / limit),
+          totalPages: Math.ceil(total / limit),
         },
       },
       orders,

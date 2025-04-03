@@ -70,4 +70,36 @@ export const ProductValidations = {
         .optional(),
     }),
   }),
+
+  list: z.object({
+    query: z.object({
+      sort: z.string().optional(),
+      categories: z
+        .string()
+        .transform(v => v && v.split(',').map(v => v.trim()))
+        .optional(),
+      colors: z
+        .string()
+        .transform(v => v && v.split(',').map(v => v.trim()))
+        .optional(),
+      minPrice: z.coerce.number().optional(),
+      maxPrice: z.coerce.number().optional(),
+      sizes: z
+        .string()
+        .transform(v => v && v.split(',').map(v => v.trim()))
+        .optional(),
+      materials: z
+        .string()
+        .transform(v => v && v.split(',').map(v => v.trim()))
+        .optional(),
+      isBuyable: z
+        .string()
+        .transform(v => v !== 'false')
+        .optional(),
+      isRentable: z
+        .string()
+        .transform(v => v !== 'false')
+        .optional(),
+    }),
+  }),
 };

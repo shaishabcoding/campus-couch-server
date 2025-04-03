@@ -52,7 +52,11 @@ admin.post(
 
 const user = Router();
 
-user.get('/', purifyRequest(QueryValidations.list), ProductControllers.list);
+user.get(
+  '/',
+  purifyRequest(QueryValidations.list, ProductValidations.list),
+  ProductControllers.list,
+);
 
 user.get(
   '/:productId',
