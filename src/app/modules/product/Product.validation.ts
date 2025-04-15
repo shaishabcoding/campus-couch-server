@@ -33,6 +33,9 @@ export const ProductValidations = {
             strMaterials && (JSON.parse(strMaterials) as string[]),
         )
         .optional(),
+      height: z.string().optional(),
+      width: z.string().optional(),
+      length: z.string().optional(),
     }),
   }),
 
@@ -68,6 +71,9 @@ export const ProductValidations = {
             strMaterials && (JSON.parse(strMaterials) as string[]),
         )
         .optional(),
+      height: z.string().optional(),
+      width: z.string().optional(),
+      length: z.string().optional(),
     }),
   }),
 

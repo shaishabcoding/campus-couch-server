@@ -55,6 +55,9 @@ const productSchema = new Schema<TProduct>(
     color: String,
     size: String,
     materials: [String],
+    height: String,
+    width: String,
+    length: String,
   },
   {
     timestamps: true,

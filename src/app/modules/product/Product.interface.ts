@@ -19,6 +19,9 @@ export type TProduct = {
   materials?: string[];
   refProduct?: Types.ObjectId | string;
   rating?: number;
+  height: string;
+  width: string;
+  length: string;
   createdAt: Date;
   updatedAt: Date;
 };
