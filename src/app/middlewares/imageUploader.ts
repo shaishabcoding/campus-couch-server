@@ -3,29 +3,21 @@ import path from 'path';
 import multer, { FileFilterCallback } from 'multer';
 import { StatusCodes } from 'http-status-codes';
 import ServerError from '../../errors/ServerError';
-import { Request, ErrorRequestHandler } from 'express';
 import deleteFile from '../../util/file/deleteFile';
 import { createDir } from '../../util/file/createDir';
 import catchAsync from '../../util/server/catchAsync';
 import sharp from 'sharp';
 
 /**
- * Image upload middleware using multer.
- *
- * @param {Function} cb - A function to handle uploaded images.
+ * @description Multer middleware to handle image uploads with optional resizing.
  */
-const imageUploader = (
-  cb: (req: Request, images: string[]) => void,
-  {
-    isOptional = false,
-    width,
-    height,
-  }: {
-    isOptional?: boolean;
-    width?: number;
-    height?: number;
-  } = {},
-) => {
+const imageUploader = ({
+  width,
+  height,
+}: {
+  width?: number;
+  height?: number;
+} = {}) => {
   const uploadDir = path.join(process.cwd(), 'uploads', 'images');
   const resizedDir = path.join(uploadDir, 'resized');
 
@@ -61,7 +53,7 @@ const imageUploader = (
   const upload = multer({
     storage,
     fileFilter,
-  }).fields([{ name: 'images', maxCount: 20 }]); // Allow up to 20 images
+  }).fields([{ name: 'images', maxCount: 20 }]);
 
   return catchAsync((req, res, next) => {
     upload(req, res, async err => {
@@ -77,19 +69,17 @@ const imageUploader = (
         !uploadedImages ||
         !uploadedImages.images ||
         uploadedImages.images.length === 0
-      ) {
-        if (!isOptional)
-          throw new ServerError(StatusCodes.BAD_REQUEST, 'No images uploaded');
-
+      )
         return next();
-      }
 
       const resizedImages: string[] = [];
+
       for (const file of uploadedImages.images) {
         const filePath = path.join(uploadDir, file.filename);
 
-        if (!width && !height) resizedImages.push(`/images/${file.filename}`);
-        else {
+        if (!width && !height) {
+          resizedImages.push(`/images/${file.filename}`);
+        } else {
           const resizedFilePath = path.join(resizedDir, file.filename);
 
           try {
@@ -109,25 +99,10 @@ const imageUploader = (
         }
       }
 
-      cb(req, resizedImages);
+      req.body.images = resizedImages;
       next();
     });
-  }, imagesUploadRollback);
-};
-
-/** Middleware for rolling back image uploads if an error occurs */
-export const imagesUploadRollback: ErrorRequestHandler = (
-  err,
-  req,
-  _,
-  next,
-) => {
-  if (req.files && 'images' in req.files && Array.isArray(req.files.images))
-    req.files.images.forEach(
-      async ({ filename }) => await deleteFile(`/images/${filename}`),
-    );
-
-  next(err);
+  });
 };
 
 export default imageUploader;

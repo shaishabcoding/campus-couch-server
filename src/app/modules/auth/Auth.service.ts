@@ -98,7 +98,7 @@ export const AuthServices = {
 
     if (!user) throw new ServerError(StatusCodes.NOT_FOUND, 'User not found!');
 
-    return await this.retrieveToken(user._id);
+    return this.retrieveToken(user._id);
   },
 
   async retrieveToken(userId: Types.ObjectId) {
@@ -123,9 +123,9 @@ export const AuthServices = {
             'You are not authorized!',
           );
 
-        return await this.facebookLogin(token);
+        return this.facebookLogin(token);
       case 'google':
-        return await this.googleLogin(body);
+        return this.googleLogin(body);
       // case 'apple':
       //   break;
       default:

@@ -3,28 +3,28 @@ import { EOrderState } from './Order.enum';
 
 export type TOrder = {
   _id?: Types.ObjectId;
+  name?: string;
   details: {
-    book: Types.ObjectId;
+    product: Types.ObjectId;
     quantity: number;
+    rentalLength?: number;
   }[];
-  customer: TCustomer;
   user: Types.ObjectId;
-  transaction?: Types.ObjectId;
+  customer: TCustomer;
   amount: number;
   state: EOrderState;
-  createdAt?: Date;
-  updatedAt?: Date;
+  transaction?: Types.ObjectId;
+  createdAt: Date;
+  updatedAt: Date;
 };
 
 export type TCustomer = {
   name: string;
-  email?: string;
-  phone?: string;
+  contact: string;
   address: {
     country: string;
-    address: string;
-    zip: string;
     city: string;
-    apartment?: string;
+    zip: string;
+    street: string;
   };
 };

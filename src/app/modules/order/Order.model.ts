@@ -1,58 +1,72 @@
-import { model, Schema } from 'mongoose';
-import { TOrder } from './Order.interface';
+import { model, Schema, Types } from 'mongoose';
 import { EOrderState } from './Order.enum';
+import { TCustomer, TOrder } from './Order.interface';
 
-const addressSchema = new Schema(
+export const customerSchema = new Schema<TCustomer>(
   {
-    country: { type: String, required: true },
-    address: { type: String, required: true },
-    zip: { type: String, required: true },
-    city: { type: String, required: true },
-    apartment: { type: String },
+    name: {
+      type: String,
+      required: true,
+    },
+    contact: {
+      type: String,
+      required: true,
+    },
+    address: {
+      type: {
+        country: {
+          type: String,
+          required: true,
+        },
+        city: {
+          type: String,
+          required: true,
+        },
+        zip: {
+          type: String,
+          required: true,
+        },
+        street: {
+          type: String,
+          required: true,
+        },
+      },
+      required: true,
+      _id: false,
+    },
   },
-  { _id: false },
-);
-
-const customerSchema = new Schema(
   {
-    name: { type: String, required: true },
-    email: { type: String },
-    phone: { type: String },
-    address: { type: addressSchema, required: true },
+    _id: false,
   },
-  { _id: false },
 );
 
 const orderSchema = new Schema<TOrder>(
   {
-    details: [
-      {
-        _id: false,
-        book: {
-          type: Schema.Types.ObjectId,
-          ref: 'Book',
-          required: true,
+    name: String,
+    details: {
+      type: [
+        {
+          product: {
+            type: Schema.Types.ObjectId,
+            ref: 'Product',
+            required: true,
+          },
+          quantity: {
+            type: Number,
+            required: true,
+            min: 1,
+          },
+          rentalLength: Number,
         },
-        quantity: {
-          type: Number,
-          required: true,
-          min: 1,
-        },
-      },
-    ],
-    customer: {
-      type: customerSchema,
-      required: true,
+      ],
+      _id: false,
     },
     user: {
       type: Schema.Types.ObjectId,
       ref: 'User',
       required: true,
     },
-    transaction: {
-      type: Schema.Types.ObjectId,
-      ref: 'Transaction',
-    },
+    customer: customerSchema,
     amount: {
       type: Number,
       required: true,
@@ -60,9 +74,12 @@ const orderSchema = new Schema<TOrder>(
     },
     state: {
       type: String,
-      required: true,
       enum: Object.values(EOrderState),
       default: EOrderState.PENDING,
+    },
+    transaction: {
+      type: Types.ObjectId,
+      ref: 'Transaction',
     },
   },
   {

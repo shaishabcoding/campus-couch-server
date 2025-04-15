@@ -28,7 +28,10 @@ const config = {
     default_avatar: env('default avatar', '/images/placeholder.png'),
   },
   url: {
-    database: env('database url', 'mongodb://127.0.0.1:27017'),
+    database: env(
+      'database url',
+      `mongodb://127.0.0.1:27017/${name.toLowerCase().replace(' ', '-')}`,
+    ),
     payment: {
       success: env('payment success url', `${href}/payment/success`),
       cancel: env('payment cancel url', `${href}/payment/cancel`),
@@ -64,14 +67,6 @@ const config = {
     name: env('admin name', 'Mr. Admin'),
     email: env('admin email', email),
     password: env('admin password', genSecret(4)),
-  },
-  auth: {
-    apple: {
-      client: env('apple client id', ''),
-    },
-  },
-  chatgpt: {
-    key: env('chatgpt key', ''),
   },
 };
 

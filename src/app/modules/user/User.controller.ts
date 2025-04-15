@@ -1,7 +1,6 @@
 import { UserServices } from './User.service';
 import catchAsync from '../../../util/server/catchAsync';
 import serveResponse from '../../../util/server/serveResponse';
-import { imagesUploadRollback } from '../../middlewares/imageUploader';
 
 export const UserControllers = {
   create: catchAsync(async ({ body }, res) => {
@@ -13,13 +12,15 @@ export const UserControllers = {
   }),
 
   edit: catchAsync(async (req, res) => {
+    req.body.avatar = req.body.images[0];
+
     const updatedUser = await UserServices.edit(req);
 
     serveResponse(res, {
       message: 'Profile updated successfully!',
       data: updatedUser,
     });
-  }, imagesUploadRollback),
+  }),
 
   list: catchAsync(async (req, res) => {
     const { meta, users } = await UserServices.list(req.query);

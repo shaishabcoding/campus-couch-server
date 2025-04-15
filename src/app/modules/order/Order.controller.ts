@@ -1,35 +1,39 @@
+import catchAsync from '../../../util/server/catchAsync';
 import serveResponse from '../../../util/server/serveResponse';
 import { PaymentServices } from '../payment/Payment.service';
-import catchAsync from '../../../util/server/catchAsync';
-import { OrderService } from './Order.service';
-import { EOrderState } from './Order.enum';
 import { EUserRole } from '../user/User.enum';
+import { EOrderState } from './Order.enum';
+import { OrderServices } from './Order.service';
 
-export const OrderController = {
-  checkout: catchAsync(async ({ body, user, query }, res) => {
-    const { orderId, amount } = await OrderService.checkout(body, user!._id!);
+export const OrderControllers = {
+  checkout: catchAsync(
+    async ({ body, user, query, params: { bundleId } }, res) => {
+      const { order, amount } = !bundleId
+        ? await OrderServices.checkout(body, user!._id!)
+        : await OrderServices.bundleCheckout({ ...body, bundleId }, user!._id!);
 
-    const checkout_url = await PaymentServices.create({
-      name: orderId.toString(),
-      amount,
-      method: query.method,
-    });
+      const checkout_url = await PaymentServices.create({
+        name: order._id.toString(),
+        amount,
+        method: query.method,
+      });
 
-    serveResponse(res, {
-      message: 'Order created successfully!',
-      meta: {
-        orderId,
-      },
-      data: {
-        checkout_url,
-      },
-    });
-  }),
+      serveResponse(res, {
+        message: 'Order created successfully!',
+        meta: {
+          order,
+        },
+        data: {
+          checkout_url,
+        },
+      });
+    },
+  ),
 
   changeState: catchAsync(async ({ params, user }, res) => {
     if (user?.role !== EUserRole.ADMIN) params.state = EOrderState.CANCEL;
 
-    const data = await OrderService.changeState(
+    const data = await OrderServices.changeState(
       params.orderId,
       params.state as EOrderState,
     );
@@ -41,7 +45,7 @@ export const OrderController = {
   }),
 
   list: catchAsync(async ({ query, user }, res) => {
-    const { meta, orders } = await OrderService.list(query, user!);
+    const { meta, orders } = await OrderServices.list(query, user!);
 
     serveResponse(res, {
       message: 'Orders retrieved successfully!',
@@ -51,7 +55,7 @@ export const OrderController = {
   }),
 
   retrieve: catchAsync(async ({ user, params }, res) => {
-    const data = await OrderService.retrieve(params.orderId, user!);
+    const data = await OrderServices.retrieve(params.orderId, user!);
 
     serveResponse(res, {
       message: 'Order retrieved successfully!',

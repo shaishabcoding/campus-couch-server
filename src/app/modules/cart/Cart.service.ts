@@ -2,28 +2,22 @@ import { Types } from 'mongoose';
 import Cart from './Cart.model';
 
 export const CartServices = {
-  async add(book: string, user: Types.ObjectId) {
-    await Cart.findOneAndUpdate(
+  async sync(productIds: string[], user: Types.ObjectId) {
+    return Cart.findOneAndUpdate(
       { user },
-      { $addToSet: { books: book } },
+      { $addToSet: { products: { $each: productIds } } },
       { upsert: true, new: true },
-    );
+    )
+      .select('products')
+      .populate('products')
+      .lean();
   },
 
-  async retrieve(user: Types.ObjectId) {
-    const cart = await Cart.findOne({ user }).populate(
-      'books',
-      'title images author price',
-    );
-
-    return cart?.books ?? [];
-  },
-
-  async remove(book: string, user: Types.ObjectId) {
-    await Cart.findOneAndUpdate(
+  async remove(productId: string, user: Types.ObjectId) {
+    return Cart.findOneAndUpdate(
       { user },
-      { $pull: { books: book } },
+      { $pull: { products: productId } },
       { upsert: true, new: true },
-    );
+    ).lean();
   },
 };

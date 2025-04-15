@@ -4,7 +4,7 @@ import { StatusCodes } from 'http-status-codes';
 export type TPagination = {
   page: number;
   limit: number;
-  totalPage: number;
+  totalPages: number;
   total: number;
 };
 

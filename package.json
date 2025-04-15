@@ -1,23 +1,24 @@
 {
-  "name": "angry-gpt",
+  "name": "campus-couch",
   "version": "1.0.0",
-  "description": "A dynamic chatbot that can express different emotional states while interacting with users.",
+  "description": "Elevate your space with stylish, affordable furniture tailored for students and young professionals.",
   "main": "dist/server.js",
   "scripts": {
     "build": "tsc",
     "start": "node dist/server.js",
     "dev": "ts-node-dev --respawn --transpile-only src/server.ts",
-    "stripe": "stripe listen --forward-to http://192.168.10.132:3036/api/v1/payment/stripe/webhook",
+    "stripe": "stripe listen --forward-to http://192.168.10.132:3759/api/v1/payment/stripe/webhook",
     "lint": "eslint src --ignore-path .eslintignore --ext .ts",
     "prettier": "prettier --ignore-path .gitignore --write \"./src/**/*.+(js|ts|json)\"",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "new-module": "node ./src/app/modules/.builder.js"
   },
   "keywords": [
-    "chatbot",
-    "emotional",
-    "express",
-    "typescript",
-    "nodejs"
+    "Affordable",
+    "Stylish",
+    "Furniture",
+    "Students",
+    "Convenience"
   ],
   "author": {
     "name": "Shaishab Chandra Shil",
@@ -38,6 +39,7 @@
     "@typescript-eslint/parser": "^7.15.0",
     "eslint": "^8.57.1",
     "eslint-config-prettier": "^9.1.0",
+    "inquirer": "^7.3.3",
     "kill-port": "^2.0.1",
     "prettier": "^3.4.2",
     "prettier-eslint": "^16.3.0",

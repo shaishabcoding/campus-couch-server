@@ -1,37 +1,37 @@
 import { Router } from 'express';
-import { OrderController } from './Order.controller';
+import { OrderControllers } from './Order.controller';
+import { OrderValidations } from './Order.validation';
 import purifyRequest from '../../middlewares/purifyRequest';
 import { QueryValidations } from '../query/Query.validation';
 import Order from './Order.model';
-import { OrderValidation } from './Order.validation';
 
 const router = Router();
 
 router.get(
   '/',
-  purifyRequest(QueryValidations.list, OrderValidation.list),
-  OrderController.list,
+  purifyRequest(QueryValidations.list, OrderValidations.state('query', true)),
+  OrderControllers.list,
 );
 
 router.get(
   '/:orderId',
   purifyRequest(QueryValidations.exists('orderId', Order)),
-  OrderController.retrieve,
+  OrderControllers.retrieve,
 );
 
 router.post(
   '/checkout',
-  purifyRequest(OrderValidation.checkout),
-  OrderController.checkout,
+  purifyRequest(OrderValidations.checkout),
+  OrderControllers.checkout,
 );
 
 router.patch(
   '/:orderId/:state',
   purifyRequest(
     QueryValidations.exists('orderId', Order),
-    OrderValidation.state,
+    OrderValidations.state('params'),
   ),
-  OrderController.changeState,
+  OrderControllers.changeState,
 );
 
 export const OrderRoutes = router;
