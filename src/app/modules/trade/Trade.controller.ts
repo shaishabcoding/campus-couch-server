@@ -47,4 +47,12 @@ export const TradeControllers = {
       data,
     });
   }),
+
+  delete: catchAsync(async ({ params, user }, res) => {
+    await TradeServices.delete(params.tradeId, user!);
+
+    serveResponse(res, {
+      message: 'Trade deleted successfully!',
+    });
+  }),
 };

@@ -4,6 +4,9 @@ import { TTrade } from './Trade.interface';
 import Trade from './Trade.model';
 import { TUser } from '../user/User.interface';
 import { EUserRole } from '../user/User.enum';
+import deleteFile from '../../../util/file/deleteFile';
+import ServerError from '../../../errors/ServerError';
+import { StatusCodes } from 'http-status-codes';
 
 export const TradeServices = {
   async create(tradeData: TTrade) {
@@ -47,4 +50,15 @@ export const TradeServices = {
 
     return Trade.findOne(filter);
   },
+
+  async delete(tradeId: string, user: TUser) {
+    const trade = (await Trade.findByIdAndDelete(tradeId))!;
+
+    if (user.role !== EUserRole.ADMIN && trade.user !== user._id)
+      throw new ServerError(StatusCodes.UNAUTHORIZED, 'You are not authorized to delete this trade.');
+
+    await Trade.findByIdAndDelete(tradeId);
+
+    trade.images?.forEach(deleteFile);
+  }
 };

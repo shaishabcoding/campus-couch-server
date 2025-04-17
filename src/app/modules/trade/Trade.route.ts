@@ -40,4 +40,9 @@ router.patch(
   TradeControllers.changeState,
 );
 
+router.delete("/:tradeId/delete",
+  purifyRequest(QueryValidations.exists('tradeId', Trade)),
+  TradeControllers.delete
+);
+
 export const TradeRoutes = router;
