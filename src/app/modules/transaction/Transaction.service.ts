@@ -6,12 +6,28 @@ export const TransactionServices = {
     return Transaction.create(transactionData);
   },
 
-  async retrieve({ page = 1, limit = 10 }: Record<string, any>) {
+  async list({ page = 1, limit = 10 }: Record<string, any>) {
     const transactions = await Transaction.find()
-      .populate('user')
+      .populate('user', 'name avatar email')
       .skip((page - 1) * limit)
       .limit(limit);
 
-    return transactions;
+    const total = await Transaction.countDocuments();
+
+    return {
+      transactions,
+      meta: {
+        pagination: {
+          page,
+          limit,
+          total,
+          totalPages: Math.ceil(total / limit),
+        },
+      }
+    };
+  },
+
+  async retrieve(transactionId: string) {
+    return Transaction.findById(transactionId).populate('user', 'name avatar email');
   },
 };

@@ -3,12 +3,22 @@ import { TransactionServices } from './Transaction.service';
 import serveResponse from '../../../util/server/serveResponse';
 
 export const TransactionControllers = {
-  retrieve: catchAsync(async (req, res) => {
-    const data = await TransactionServices.retrieve(req.query);
+  list: catchAsync(async ({ query }, res) => {
+    const { meta, transactions } = await TransactionServices.list(query);
 
     serveResponse(res, {
-      message: 'Transaction retrieved successful.',
-      data,
+      message: 'Transactions retrieved successfully.',
+      meta,
+      data: transactions,
     });
   }),
+
+  retrieve: catchAsync(async ({ params }, res) => {
+    const data = await TransactionServices.retrieve(params.transactionId);
+
+    serveResponse(res, {
+      message: 'Transaction retrieved successfully.',
+      data,
+    })
+  })
 };
