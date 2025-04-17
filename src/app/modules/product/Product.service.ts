@@ -122,4 +122,27 @@ export const ProductServices = {
 
     return product;
   },
+
+  async search({ name, page, limit }: Record<string, any>) {
+    const products = await Product.find({ name: { $regex: name, $options: 'i' } })
+      .select("name images")
+      .skip((page - 1) * limit).limit(limit);
+
+    const total = await Product.countDocuments({ name: { $regex: name, $options: 'i' } });
+
+    return {
+      products,
+      meta: {
+        pagination: {
+          page,
+          limit,
+          total,
+          totalPages: Math.ceil(total / limit),
+        },
+        current: {
+          name
+        }
+      },
+    };
+  },
 };

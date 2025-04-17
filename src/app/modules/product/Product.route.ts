@@ -58,6 +58,8 @@ user.get(
   ProductControllers.list,
 );
 
+user.get("/search/:name", purifyRequest(QueryValidations.list), ProductControllers.search);
+
 user.get(
   '/:productId',
   purifyRequest(QueryValidations.exists('productId', Product)),

@@ -67,4 +67,17 @@ export const ProductControllers = {
       message: 'Product deleted successfully!',
     });
   }),
+
+  search: catchAsync(async ({ params, query }, res) => {
+
+    query.name = params.name;
+
+    const { meta, products } = await ProductServices.search(query);
+
+    serveResponse(res, {
+      meta,
+      message: 'Products find successfully!',
+      data: products,
+    });
+  }),
 };
