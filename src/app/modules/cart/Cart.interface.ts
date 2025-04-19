@@ -1,7 +1,8 @@
 import { Types } from 'mongoose';
+import { TOrderDetails } from '../order/Order.interface';
 
 export type TCart = {
   _id?: Types.ObjectId;
   user: Types.ObjectId;
-  products: Types.ObjectId[];
+  details: TOrderDetails[];
 };

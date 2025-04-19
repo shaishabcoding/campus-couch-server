@@ -13,7 +13,7 @@ export const CartControllers = {
 
   sync: catchAsync(async ({ body, user }, res) => {
     const cart =
-      (await CartServices.sync(body.productIds, user!._id!))?.products ?? [];
+      (await CartServices.sync(body.details, user!._id!))?.details ?? [];
 
     serveResponse(res, {
       message: 'Cart sync successfully',
