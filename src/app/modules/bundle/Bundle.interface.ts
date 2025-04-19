@@ -13,6 +13,7 @@ export type TBundle = {
   isRentable: boolean;
   notes: string[];
   rating: number;
+  stock: number;
   createdAt: string;
   updatedAt: string;
 };
