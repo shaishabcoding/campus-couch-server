@@ -13,6 +13,7 @@ import { CartRoutes } from '../app/modules/cart/Cart.route';
 import { WishlistRoutes } from '../app/modules/wishlist/Wishlist.route';
 import { BundleRoutes } from '../app/modules/bundle/Bundle.route';
 import { TradeRoutes } from '../app/modules/trade/Trade.route';
+import serveResponse from '../util/server/serveResponse';
 
 const routes: TRoute[] = [
   {
@@ -65,6 +66,16 @@ const routes: TRoute[] = [
     path: '/trades',
     middlewares: [auth(EUserRole.USER, EUserRole.ADMIN)],
     route: TradeRoutes,
+  },
+  {
+    path: '/me',
+    middlewares: [auth(EUserRole.USER, EUserRole.ADMIN)],
+    route: Router().get('/', ({ user }, res) => {
+      serveResponse(res, {
+        message: 'Profile fetched successfully!',
+        data: user,
+      });
+    }),
   },
 ];
 
