@@ -4,6 +4,8 @@ import serveResponse from '../../../util/server/serveResponse';
 
 export const UserControllers = {
   create: catchAsync(async ({ body }, res) => {
+    body.avatar = body.images[0];
+
     await UserServices.create(body);
 
     serveResponse(res, {
