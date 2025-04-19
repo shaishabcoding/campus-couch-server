@@ -3,6 +3,7 @@ import { TRoute } from '../../../types/route.types';
 import { UserRoutes } from '../user/User.route';
 import { ProductRoutes } from '../product/Product.route';
 import { BundleRoutes } from '../bundle/Bundle.route';
+import { TransactionRoutes } from '../transaction/Transaction.route';
 
 const routes: TRoute[] = [
   {
@@ -17,6 +18,10 @@ const routes: TRoute[] = [
     path: '/bundles',
     route: BundleRoutes.admin,
   },
+  {
+    path: "/transactions",
+    route: TransactionRoutes
+  }
 ];
 
 export default Router().inject(routes);

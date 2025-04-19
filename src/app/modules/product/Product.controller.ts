@@ -29,6 +29,8 @@ export const ProductControllers = {
 
     if (body.price) productData.isBuyable = true;
     if (body.rentPrice) productData.isRentable = true;
+    if (!body.isBuyable && body.price) productData.isBuyable = true;
+    if (!body.isRentable && body.rentPrice) productData.isRentable = true;
 
     Object.assign(productData, body);
 
@@ -65,6 +67,18 @@ export const ProductControllers = {
 
     serveResponse(res, {
       message: 'Product deleted successfully!',
+    });
+  }),
+
+  search: catchAsync(async ({ params, query }, res) => {
+    query.name = params.name;
+
+    const { meta, products } = await ProductServices.search(query);
+
+    serveResponse(res, {
+      meta,
+      message: 'Products find successfully!',
+      data: products,
     });
   }),
 };

@@ -12,6 +12,10 @@ const router = express.Router();
 
 router.post(
   '/register',
+  imageUploader({
+    width: 300,
+    height: 300,
+  }),
   purifyRequest(UserValidations.create),
   UserControllers.create,
 );

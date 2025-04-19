@@ -1,14 +1,16 @@
 import { Types } from 'mongoose';
 import { EOrderState } from './Order.enum';
 
+export type TOrderDetails = {
+  product: Types.ObjectId | string;
+  quantity: number;
+  rentalLength: number;
+};
+
 export type TOrder = {
   _id?: Types.ObjectId;
   name?: string;
-  details: {
-    product: Types.ObjectId;
-    quantity: number;
-    rentalLength?: number;
-  }[];
+  details: TOrderDetails[];
   user: Types.ObjectId;
   customer: TCustomer;
   amount: number;

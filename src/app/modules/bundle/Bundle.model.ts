@@ -42,6 +42,11 @@ const bundleSchema = new Schema<TBundle>(
       required: true,
       default: 5,
     },
+    stock: {
+      type: Number,
+      required: true,
+      default: 0,
+    },
   },
   {
     timestamps: true,
