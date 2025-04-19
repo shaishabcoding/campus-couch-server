@@ -9,10 +9,11 @@ export const CartServices = {
       {
         $addToSet: {
           details: {
-            $each: details.map(detail => ({
-              ...detail,
-              product: (detail.product as string).oid,
-            })),
+            $each:
+              details?.map(detail => ({
+                ...detail,
+                product: (detail.product as string).oid,
+              })) ?? [],
           },
         },
       },

@@ -7,12 +7,6 @@ import { CardValidations } from './Cart.validation';
 
 const router = Router();
 
-router.post(
-  '/:productId',
-  purifyRequest(QueryValidations.exists('productId', Product)),
-  CartControllers.add,
-);
-
 router.patch(
   '/sync',
   purifyRequest(CardValidations.sync),
