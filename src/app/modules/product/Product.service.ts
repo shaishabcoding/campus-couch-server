@@ -43,7 +43,7 @@ export const ProductServices = {
     if (maxPrice !== undefined)
       filter.price = { ...filter.price, $lte: maxPrice };
     if (sizes) filter.size = { $in: sizes, $exists: true };
-    if (materials) filter.materials = { $all: materials, $exists: true };
+    if (materials) filter.materials = { $in: materials, $exists: true };
     if (isBuyable !== undefined) filter.isBuyable = isBuyable;
     if (isRentable !== undefined) filter.isRentable = isRentable;
 
@@ -124,11 +124,16 @@ export const ProductServices = {
   },
 
   async search({ name, page, limit }: Record<string, any>) {
-    const products = await Product.find({ name: { $regex: name, $options: 'i' } })
-      .select("name images")
-      .skip((page - 1) * limit).limit(limit);
+    const products = await Product.find({
+      name: { $regex: name, $options: 'i' },
+    })
+      .select('name images')
+      .skip((page - 1) * limit)
+      .limit(limit);
 
-    const total = await Product.countDocuments({ name: { $regex: name, $options: 'i' } });
+    const total = await Product.countDocuments({
+      name: { $regex: name, $options: 'i' },
+    });
 
     return {
       products,
@@ -140,8 +145,8 @@ export const ProductServices = {
           totalPages: Math.ceil(total / limit),
         },
         current: {
-          name
-        }
+          name,
+        },
       },
     };
   },
