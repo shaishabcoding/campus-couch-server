@@ -11,6 +11,8 @@ import { EUserRole } from '../user/User.enum';
 
 const admin = Router();
 
+admin.get('/', ProductControllers.search);
+
 admin.post(
   '/create',
   imageUploader({
@@ -57,8 +59,6 @@ user.get(
   purifyRequest(QueryValidations.list, ProductValidations.list),
   ProductControllers.list,
 );
-
-user.get("/search/:name", purifyRequest(QueryValidations.list), ProductControllers.search);
 
 user.get(
   '/:productId',

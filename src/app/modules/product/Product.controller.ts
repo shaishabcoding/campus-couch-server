@@ -70,13 +70,10 @@ export const ProductControllers = {
     });
   }),
 
-  search: catchAsync(async ({ params, query }, res) => {
-    query.name = params.name;
-
-    const { meta, products } = await ProductServices.search(query);
+  search: catchAsync(async (_, res) => {
+    const products = await ProductServices.search();
 
     serveResponse(res, {
-      meta,
       message: 'Products find successfully!',
       data: products,
     });
