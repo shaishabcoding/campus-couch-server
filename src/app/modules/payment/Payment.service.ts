@@ -8,7 +8,7 @@ import { EOrderState } from '../order/Order.enum';
 import { ETransactionType } from '../transaction/Transaction.enum';
 
 export const PaymentServices = {
-  create: async ({ name, amount, method = 'card' }: Record<string, any>) => {
+  create: async ({ name, amount, method }: Record<string, any>) => {
     const session = await stripe.checkout.sessions.create({
       payment_method_types: [method],
       mode: 'payment',

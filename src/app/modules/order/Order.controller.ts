@@ -22,6 +22,7 @@ export const OrderControllers = {
         message: 'Order created successfully!',
         meta: {
           order,
+          method: query.method,
         },
         data: {
           checkout_url,
