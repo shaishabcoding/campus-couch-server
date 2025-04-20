@@ -1,4 +1,5 @@
 import deleteFile from '../../../util/file/deleteFile';
+import { Product } from '../product/Product.model';
 import { TBundle } from './Bundle.interface';
 import Bundle from './Bundle.model';
 
@@ -51,5 +52,19 @@ export const BundleServices = {
 
   async retrieve(bundleId: string) {
     return Bundle.findById(bundleId).populate('products', 'name images');
+  },
+
+  async relatedProducts(bundleId: string) {
+    const bundle = (await Bundle.findById(bundleId).populate('products'))!;
+
+    const categories = bundle.products.map((product: any) => product.category);
+
+    const uniqueCategories = [...new Set(categories)];
+
+    const relatedProducts = await Product.find({
+      category: { $in: uniqueCategories },
+    }).limit(4);
+
+    return relatedProducts;
   },
 };

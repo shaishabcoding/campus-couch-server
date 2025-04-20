@@ -59,9 +59,14 @@ export const BundleControllers = {
   retrieve: catchAsync(async ({ params }, res) => {
     const data = await BundleServices.retrieve(params.bundleId);
 
+    const related = await BundleServices.relatedProducts(params.bundleId);
+
     serveResponse(res, {
       message: 'Bundle retrieved successfully!',
       data,
+      meta: {
+        related,
+      },
     });
   }),
 };
