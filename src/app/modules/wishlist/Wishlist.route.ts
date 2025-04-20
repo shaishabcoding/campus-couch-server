@@ -3,7 +3,7 @@ import purifyRequest from '../../middlewares/purifyRequest';
 import { QueryValidations } from '../query/Query.validation';
 import { Product } from '../product/Product.model';
 import { WishlistControllers } from './Wishlist.controller';
-import { CardValidations } from '../cart/Cart.validation';
+import { WishlistValidations } from './Wishlist.validation';
 
 const router = Router();
 
@@ -15,7 +15,7 @@ router.post(
 
 router.patch(
   '/sync',
-  purifyRequest(CardValidations.sync),
+  purifyRequest(WishlistValidations.sync),
   WishlistControllers.sync,
 );
 
