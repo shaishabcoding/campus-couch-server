@@ -126,4 +126,15 @@ export const ProductServices = {
   async search() {
     return Product.find().select('name images');
   },
+
+  async relatedProducts(productId: string) {
+    const product = (await Product.findById(productId).populate('category'))!;
+
+    const relatedProducts = await Product.find({
+      category: product.category,
+      _id: { $ne: productId },
+    }).limit(4);
+
+    return relatedProducts;
+  },
 };

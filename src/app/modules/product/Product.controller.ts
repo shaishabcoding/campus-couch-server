@@ -56,9 +56,14 @@ export const ProductControllers = {
   retrieve: catchAsync(async ({ params }, res) => {
     const data = await ProductServices.retrieve(params.productId);
 
+    const related = await ProductServices.relatedProducts(params.productId);
+
     serveResponse(res, {
       message: 'Product retrieved successfully!',
       data,
+      meta: {
+        related,
+      },
     });
   }),
 
