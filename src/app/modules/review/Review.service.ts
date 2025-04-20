@@ -86,7 +86,7 @@ export const ReviewServices = {
       .skip((page - 1) * limit)
       .limit(limit)
       .select('rating user content updatedAt')
-      .populate('user', 'name avatar -_id');
+      .populate('user', 'name avatar');
 
     const total = await Review.countDocuments(filter);
 
