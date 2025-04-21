@@ -1,19 +1,30 @@
 import { Types } from 'mongoose';
 import Cart from './Cart.model';
-import { TOrderDetails } from '../order/Order.interface';
 
 export const CartServices = {
-  async sync(details: TOrderDetails[], user: Types.ObjectId) {
+  async list(user: Types.ObjectId) {
+    return Cart.findOne({ user })
+      .select('details')
+      .populate('details.product')
+      .lean();
+  },
+
+  async add(
+    {
+      product,
+      quantity,
+      rentalLength,
+    }: { product: string; quantity: number; rentalLength: number },
+    user: Types.ObjectId,
+  ) {
     return Cart.findOneAndUpdate(
       { user },
       {
         $addToSet: {
           details: {
-            $each:
-              details?.map(detail => ({
-                ...detail,
-                product: (detail.product as string).oid,
-              })) ?? [],
+            product: product.oid,
+            quantity,
+            rentalLength,
           },
         },
       },

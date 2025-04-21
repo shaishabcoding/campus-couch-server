@@ -3,13 +3,22 @@ import serveResponse from '../../../util/server/serveResponse';
 import { CartServices } from './Cart.service';
 
 export const CartControllers = {
-  sync: catchAsync(async ({ body, user }, res) => {
-    const cart =
-      (await CartServices.sync(body?.details, user!._id!))?.details ?? [];
+  list: catchAsync(async ({ user }, res) => {
+    const cart = await CartServices.list(user!._id!);
 
     serveResponse(res, {
-      message: 'Cart sync successfully',
-      data: cart,
+      message: 'Cart retrieved successfully',
+      data: cart?.details ?? [],
+    });
+  }),
+
+  add: catchAsync(async ({ body, params, user }, res) => {
+    body.product = params.productId;
+
+    await CartServices.add(body, user!._id!);
+
+    serveResponse(res, {
+      message: 'Cart added successfully',
     });
   }),
 
