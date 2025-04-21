@@ -4,21 +4,19 @@ import { WishlistServices } from './Wishlist.service';
 
 export const WishlistControllers = {
   add: catchAsync(async ({ params, user }, res) => {
-    await WishlistServices.sync([params.productId], user!._id!);
+    await WishlistServices.add(params.productId, user!._id!);
 
     serveResponse(res, {
       message: 'Wishlist added successfully',
     });
   }),
 
-  sync: catchAsync(async ({ body, user }, res) => {
-    const wishlist =
-      (await WishlistServices.sync(body.productIds, user!._id!))?.products ??
-      [];
+  list: catchAsync(async ({ user }, res) => {
+    const wishlist = await WishlistServices.list(user!._id!);
 
     serveResponse(res, {
-      message: 'Wishlist sync successfully',
-      data: wishlist,
+      message: 'Wishlist retrieved successfully',
+      data: wishlist?.products ?? [],
     });
   }),
 
@@ -27,6 +25,18 @@ export const WishlistControllers = {
 
     serveResponse(res, {
       message: 'Wishlist removed successfully',
+    });
+  }),
+
+  exists: catchAsync(async ({ params, user }, res) => {
+    const wishlist = !!(await WishlistServices.exists(
+      params.productId,
+      user!._id!,
+    ));
+
+    serveResponse(res, {
+      message: `Wishlist ${wishlist ? 'exists' : 'does not exists'}.`,
+      data: { wishlist },
     });
   }),
 };
