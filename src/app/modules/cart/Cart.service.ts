@@ -35,12 +35,12 @@ export const CartServices = {
       .lean();
   },
 
-  async remove(productId: string, user: Types.ObjectId) {
+  async remove(product: string, user: Types.ObjectId) {
     return Cart.findOneAndUpdate(
       { user },
       {
         $pull: {
-          details: { product: new Types.ObjectId(productId) },
+          details: { product: product.oid },
         },
       },
       { new: true },
