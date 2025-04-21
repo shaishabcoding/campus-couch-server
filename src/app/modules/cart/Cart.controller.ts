@@ -13,7 +13,7 @@ export const CartControllers = {
   }),
 
   add: catchAsync(async ({ body, params, user }, res) => {
-    body.product = params.productId;
+    body.product = params.productId.oid;
 
     await CartServices.add(body, user!._id!);
 
@@ -23,7 +23,7 @@ export const CartControllers = {
   }),
 
   remove: catchAsync(async ({ params, user }, res) => {
-    await CartServices.remove(params.productId, user!._id!);
+    await CartServices.remove(params.productId.oid, user!._id!);
 
     serveResponse(res, {
       message: 'Cart removed successfully',

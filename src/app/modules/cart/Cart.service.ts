@@ -1,5 +1,6 @@
 import { Types } from 'mongoose';
 import Cart from './Cart.model';
+import { TOrderDetails } from '../order/Order.interface';
 
 export const CartServices = {
   async list(user: Types.ObjectId) {
@@ -9,25 +10,10 @@ export const CartServices = {
       .lean();
   },
 
-  async add(
-    {
-      product,
-      quantity,
-      rentalLength,
-    }: { product: string; quantity: number; rentalLength: number },
-    user: Types.ObjectId,
-  ) {
+  async add(details: TOrderDetails, user: Types.ObjectId) {
     return Cart.findOneAndUpdate(
       { user },
-      {
-        $addToSet: {
-          details: {
-            product: product.oid,
-            quantity,
-            rentalLength,
-          },
-        },
-      },
+      { $addToSet: { details } },
       { upsert: true, new: true },
     )
       .select('details')
@@ -35,14 +21,10 @@ export const CartServices = {
       .lean();
   },
 
-  async remove(product: string, user: Types.ObjectId) {
+  async remove(product: Types.ObjectId, user: Types.ObjectId) {
     return Cart.findOneAndUpdate(
       { user },
-      {
-        $pull: {
-          details: { product: product.oid },
-        },
-      },
+      { $pull: { details: { product } } },
       { new: true },
     )
       .select('details')

@@ -2,7 +2,7 @@ import { Types } from 'mongoose';
 import { EOrderState } from './Order.enum';
 
 export type TOrderDetails = {
-  product: Types.ObjectId | string;
+  product: Types.ObjectId;
   quantity: number;
   rentalLength: number;
 };
