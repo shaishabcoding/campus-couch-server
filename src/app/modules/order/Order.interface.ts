@@ -28,5 +28,6 @@ export type TCustomer = {
     city: string;
     zip: string;
     street: string;
+    apartment: string;
   };
 };
