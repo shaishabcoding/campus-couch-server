@@ -21,12 +21,11 @@ const imageUploader = ({
   const uploadDir = path.join(process.cwd(), 'uploads', 'images');
   const resizedDir = path.join(uploadDir, 'resized');
 
-  createDir(uploadDir);
-  createDir(resizedDir);
+  createDir(uploadDir, resizedDir);
 
   const storage = multer.diskStorage({
     destination: (_req, _file, cb) => cb(null, uploadDir),
-    filename: (_req, file, cb) => {
+    filename: (_, file, cb) => {
       const fileExt = path.extname(file.originalname);
       const fileName =
         file.originalname
@@ -57,29 +56,19 @@ const imageUploader = ({
 
   return catchAsync((req, res, next) => {
     upload(req, res, async err => {
-      if (err)
-        throw new ServerError(
-          StatusCodes.BAD_REQUEST,
-          err.message || 'File upload failed',
-        );
+      if (err) next(err);
 
       const uploadedImages = req.files as { images?: Express.Multer.File[] };
 
-      if (
-        !uploadedImages ||
-        !uploadedImages.images ||
-        uploadedImages.images.length === 0
-      )
-        return next();
+      if (!uploadedImages?.images?.length) return next();
 
       const resizedImages: string[] = [];
 
       for (const file of uploadedImages.images) {
         const filePath = path.join(uploadDir, file.filename);
 
-        if (!width && !height) {
-          resizedImages.push(`/images/${file.filename}`);
-        } else {
+        if (!width && !height) resizedImages.push(`/images/${file.filename}`);
+        else {
           const resizedFilePath = path.join(resizedDir, file.filename);
 
           try {
@@ -90,10 +79,12 @@ const imageUploader = ({
             await deleteFile(`/images/${file.filename}`);
 
             resizedImages.push(`/images/resized/${file.filename}`);
-          } catch (resizeError) {
-            throw new ServerError(
-              StatusCodes.INTERNAL_SERVER_ERROR,
-              'Image resizing failed',
+          } catch {
+            next(
+              new ServerError(
+                StatusCodes.INTERNAL_SERVER_ERROR,
+                'Image resizing failed',
+              ),
             );
           }
         }

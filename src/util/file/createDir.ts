@@ -1,10 +1,13 @@
 import fs from 'fs';
 
 /**
- * Creates a directory if it doesn't exist
+ * Creates directories if they don't exist
  *
- * This function checks if a directory exists at the specified path.
- * If it doesn't exist, it creates the directory.
+ * This function checks if directories exist at the specified paths.
+ * If they don't exist, it creates them. It supports multiple paths.
  */
-export const createDir = (path: string) =>
-  !fs.existsSync(path) && fs.mkdirSync(path, { recursive: true });
+export const createDir = (...paths: string[]) => {
+  paths.forEach(
+    path => !fs.existsSync(path) && fs.mkdirSync(path, { recursive: true }),
+  );
+};
