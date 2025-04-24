@@ -13,12 +13,54 @@ export const CartServices = {
   async add(details: TOrderDetails, user: Types.ObjectId) {
     return Cart.findOneAndUpdate(
       { user },
-      { $addToSet: { details } },
-      { upsert: true, new: true },
-    )
-      .select('details')
-      .populate('details.product')
-      .lean();
+      [
+        {
+          $set: {
+            details: {
+              $let: {
+                vars: {
+                  currentDetails: { $ifNull: ['$details', []] },
+                  existing: {
+                    $filter: {
+                      input: { $ifNull: ['$details', []] },
+                      as: 'item',
+                      cond: { $eq: ['$$item.product', details?.product] },
+                    },
+                  },
+                },
+                in: {
+                  $cond: [
+                    { $gt: [{ $size: '$$existing' }, 0] },
+                    {
+                      $map: {
+                        input: '$$currentDetails',
+                        as: 'item',
+                        in: {
+                          $cond: [
+                            { $eq: ['$$item.product', details?.product] },
+                            {
+                              $mergeObjects: ['$$item', details],
+                            },
+                            '$$item',
+                          ],
+                        },
+                      },
+                    },
+                    {
+                      $concatArrays: ['$$currentDetails', [details]],
+                    },
+                  ],
+                },
+              },
+            },
+          },
+        },
+      ],
+      {
+        new: true,
+        upsert: true,
+      },
+    );
   },
 
   async remove(product: Types.ObjectId, user: Types.ObjectId) {

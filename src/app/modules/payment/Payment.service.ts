@@ -22,8 +22,8 @@ export const PaymentServices = {
           quantity: 1,
         },
       ],
-      success_url: config.url.payment.success,
-      cancel_url: config.url.payment.cancel,
+      success_url: `${config.url.payment.success}?orderId=${name}`,
+      cancel_url: `${config.url.payment.cancel}?orderId=${name}`,
     });
 
     return session.url;
