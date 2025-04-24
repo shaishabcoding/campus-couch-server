@@ -60,6 +60,8 @@ user.get(
   ProductControllers.list,
 );
 
+user.get('/categories/list', ProductControllers.categories);
+
 user.get(
   '/:productId',
   purifyRequest(QueryValidations.exists('productId', Product)),

@@ -137,4 +137,22 @@ export const ProductServices = {
 
     return relatedProducts;
   },
+
+  async categories() {
+    return Product.aggregate([
+      {
+        $group: {
+          _id: '$category',
+          firstImage: { $first: '$images' },
+        },
+      },
+      {
+        $project: {
+          name: '$_id',
+          image: { $arrayElemAt: ['$firstImage', 0] },
+          _id: 0,
+        },
+      },
+    ]);
+  },
 };

@@ -83,4 +83,13 @@ export const ProductControllers = {
       data: products,
     });
   }),
+
+  categories: catchAsync(async (_, res) => {
+    const categories = await ProductServices.categories();
+
+    serveResponse(res, {
+      message: 'Categories retrieved successfully!',
+      data: categories,
+    });
+  }),
 };
