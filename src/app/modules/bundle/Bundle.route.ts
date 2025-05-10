@@ -11,6 +11,7 @@ import auth from '../../middlewares/auth';
 import { OrderControllers } from '../order/Order.controller';
 import { OrderValidations } from '../order/Order.validation';
 import { PaymentValidations } from '../payment/Payment.validation';
+import { ReviewValidations } from '../review/Review.validation';
 
 const admin = Router();
 
@@ -63,7 +64,10 @@ user.get(
 user.patch(
   '/:bundleId/review',
   auth(EUserRole.USER, EUserRole.ADMIN),
-  purifyRequest(QueryValidations.exists('bundleId', Bundle)),
+  purifyRequest(
+    QueryValidations.exists('bundleId', Bundle),
+    ReviewValidations.store,
+  ),
   ReviewControllers.store,
 );
 

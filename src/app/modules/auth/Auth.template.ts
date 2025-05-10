@@ -11,7 +11,6 @@ export const AuthTemplates = {
   				content="width=device-width, initial-scale=1.0"
   			/>
   			<title>${config.server.name} - ${type === 'reset' ? 'Password Reset' : 'Account Activation'} Verification</title>
-				<base href="${config.server.href}" />
 				<style>
 					* {
 					  margin: 0;
@@ -198,7 +197,7 @@ export const AuthTemplates = {
   			<div class="container">
   				<div class="card">
   					<div class="header">
-  						<img src="${config.server.logo}" class="logo" alt="${config.server.name} Logo" />
+  						<img src="https://www.campuscouch.com/favicon.svg" class="logo" alt="${config.server.name} Logo" />
   						<h1>${type === 'reset' ? 'Password Reset' : 'Account Activation'}</h1>
   						<p>Verification Required</p>
   					</div>
