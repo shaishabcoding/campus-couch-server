@@ -1,4 +1,7 @@
 import { z } from 'zod';
+import { json } from '../../../util/transform/json';
+import { boolean } from '../../../util/transform/boolean';
+import { array } from '../../../util/transform/array';
 
 export const ProductValidations = {
   create: z.object({
@@ -8,31 +11,16 @@ export const ProductValidations = {
       description: z.string().min(1, 'Description is required'),
       price: z.coerce.number().optional(),
       rentPrice: z.coerce.number().optional(),
-      isRentable: z
-        .string()
-        .transform(v => v === 'true')
-        .optional(),
-      isBuyable: z
-        .string()
-        .transform(v => v === 'true')
-        .optional(),
+      isRentable: z.string().transform(boolean).optional(),
+      isBuyable: z.string().transform(boolean).optional(),
       category: z.string().optional(),
       type: z.string().optional(),
       stock: z.coerce.number().min(1, 'Stock must be at least 1'),
-      notes: z
-        .string()
-        .transform(strNotes => strNotes && (JSON.parse(strNotes) as string[]))
-        .optional(),
+      notes: z.string().transform(json).optional(),
       rating: z.coerce.number().min(1).max(5).optional(),
       color: z.string().optional(),
       size: z.string().optional(),
-      materials: z
-        .string()
-        .transform(
-          strMaterials =>
-            strMaterials && (JSON.parse(strMaterials) as string[]),
-        )
-        .optional(),
+      materials: z.string().transform(json).optional(),
       height: z.string().optional(),
       width: z.string().optional(),
       length: z.string().optional(),
@@ -46,31 +34,16 @@ export const ProductValidations = {
       description: z.string().optional(),
       price: z.coerce.number().optional(),
       rentPrice: z.coerce.number().optional(),
-      isRentable: z
-        .string()
-        .transform(v => v === 'true')
-        .optional(),
-      isBuyable: z
-        .string()
-        .transform(v => v === 'true')
-        .optional(),
+      isRentable: z.string().transform(boolean).optional(),
+      isBuyable: z.string().transform(boolean).optional(),
       category: z.string().optional(),
       type: z.string().optional(),
       stock: z.coerce.number().min(0).optional(),
-      notes: z
-        .string()
-        .transform(strNotes => strNotes && (JSON.parse(strNotes) as string[]))
-        .optional(),
+      notes: z.string().transform(json).optional(),
       refProduct: z.string().optional(),
       color: z.string().optional(),
       size: z.string().optional(),
-      materials: z
-        .string()
-        .transform(
-          strMaterials =>
-            strMaterials && (JSON.parse(strMaterials) as string[]),
-        )
-        .optional(),
+      materials: z.string().transform(json).optional(),
       height: z.string().optional(),
       width: z.string().optional(),
       length: z.string().optional(),
@@ -80,32 +53,14 @@ export const ProductValidations = {
   list: z.object({
     query: z.object({
       sort: z.string().optional(),
-      categories: z
-        .string()
-        .transform(v => v && v.split(',').map(v => v.trim()))
-        .optional(),
-      colors: z
-        .string()
-        .transform(v => v && v.split(',').map(v => v.trim()))
-        .optional(),
+      categories: z.string().transform(array).optional(),
+      colors: z.string().transform(array).optional(),
       minPrice: z.coerce.number().optional(),
       maxPrice: z.coerce.number().optional(),
-      sizes: z
-        .string()
-        .transform(v => v && v.split(',').map(v => v.trim()))
-        .optional(),
-      materials: z
-        .string()
-        .transform(v => v && v.split(',').map(v => v.trim()))
-        .optional(),
-      isBuyable: z
-        .string()
-        .transform(v => v !== 'false')
-        .optional(),
-      isRentable: z
-        .string()
-        .transform(v => v !== 'false')
-        .optional(),
+      sizes: z.string().transform(array).optional(),
+      materials: z.string().transform(array).optional(),
+      isBuyable: z.string().transform(boolean).optional(),
+      isRentable: z.string().transform(boolean).optional(),
     }),
   }),
 };

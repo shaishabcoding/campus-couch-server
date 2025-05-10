@@ -8,8 +8,11 @@ import { Product } from './Product.model';
 import { ReviewControllers } from '../review/Review.controller';
 import auth from '../../middlewares/auth';
 import { EUserRole } from '../user/User.enum';
+import { ReviewValidations } from '../review/Review.validation';
 
 const admin = Router();
+
+admin.get('/', ProductControllers.search);
 
 admin.post(
   '/create',
@@ -58,7 +61,7 @@ user.get(
   ProductControllers.list,
 );
 
-user.get("/search/:name", purifyRequest(QueryValidations.list), ProductControllers.search);
+user.get('/categories/list', ProductControllers.categories);
 
 user.get(
   '/:productId',
@@ -78,7 +81,10 @@ user.get(
 user.patch(
   '/:productId/review',
   auth(EUserRole.USER, EUserRole.ADMIN),
-  purifyRequest(QueryValidations.exists('productId', Product)),
+  purifyRequest(
+    QueryValidations.exists('productId', Product),
+    ReviewValidations.store,
+  ),
   ReviewControllers.store,
 );
 

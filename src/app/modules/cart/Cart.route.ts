@@ -7,10 +7,15 @@ import { CardValidations } from './Cart.validation';
 
 const router = Router();
 
-router.patch(
-  '/sync',
-  purifyRequest(CardValidations.sync),
-  CartControllers.sync,
+router.get('/', CartControllers.list);
+
+router.post(
+  '/:productId/add',
+  purifyRequest(
+    QueryValidations.exists('productId', Product),
+    CardValidations.add,
+  ),
+  CartControllers.add,
 );
 
 router.delete(

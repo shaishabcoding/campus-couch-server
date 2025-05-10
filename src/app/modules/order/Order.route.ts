@@ -4,6 +4,7 @@ import { OrderValidations } from './Order.validation';
 import purifyRequest from '../../middlewares/purifyRequest';
 import { QueryValidations } from '../query/Query.validation';
 import Order from './Order.model';
+import { PaymentValidations } from '../payment/Payment.validation';
 
 const router = Router();
 
@@ -21,7 +22,7 @@ router.get(
 
 router.post(
   '/checkout',
-  purifyRequest(OrderValidations.checkout),
+  purifyRequest(OrderValidations.checkout, PaymentValidations.method),
   OrderControllers.checkout,
 );
 

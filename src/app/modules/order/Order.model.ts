@@ -30,6 +30,10 @@ export const customerSchema = new Schema<TCustomer>(
           type: String,
           required: true,
         },
+        apartment: {
+          type: String,
+          required: true,
+        },
       },
       required: true,
       _id: false,

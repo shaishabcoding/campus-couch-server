@@ -8,6 +8,7 @@ const addressSchema = z.object({
   city: z.string().min(1, 'City is required'),
   zip: z.string().min(1, 'Zip is required'),
   street: z.string().min(1, 'Street is required'),
+  apartment: z.string().min(1, 'Apartment is required'),
 });
 
 export const customerSchema = z.object({

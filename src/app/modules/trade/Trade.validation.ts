@@ -1,6 +1,6 @@
 import { z } from 'zod';
 import { customerSchema } from '../order/Order.validation';
-import { TCustomer } from '../order/Order.interface';
+import { json } from '../../../util/transform/json';
 
 export const TradeValidations = {
   create: z.object({
@@ -11,12 +11,7 @@ export const TradeValidations = {
       category: z.string().min(1, 'Category is required'),
       condition: z.string().min(1, 'Condition is required'),
       price: z.coerce.number().min(1, 'Price must be at least 1'),
-      seller: z
-        .string()
-        .transform(
-          strCustomer => strCustomer && (JSON.parse(strCustomer) as TCustomer),
-        )
-        .pipe(customerSchema),
+      seller: z.string().transform(json).pipe(customerSchema),
     }),
   }),
 };

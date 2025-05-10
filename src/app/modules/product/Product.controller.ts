@@ -56,9 +56,14 @@ export const ProductControllers = {
   retrieve: catchAsync(async ({ params }, res) => {
     const data = await ProductServices.retrieve(params.productId);
 
+    const related = await ProductServices.relatedProducts(params.productId);
+
     serveResponse(res, {
       message: 'Product retrieved successfully!',
       data,
+      meta: {
+        related,
+      },
     });
   }),
 
@@ -70,15 +75,21 @@ export const ProductControllers = {
     });
   }),
 
-  search: catchAsync(async ({ params, query }, res) => {
-    query.name = params.name;
-
-    const { meta, products } = await ProductServices.search(query);
+  search: catchAsync(async (_, res) => {
+    const products = await ProductServices.search();
 
     serveResponse(res, {
-      meta,
       message: 'Products find successfully!',
       data: products,
+    });
+  }),
+
+  categories: catchAsync(async (_, res) => {
+    const categories = await ProductServices.categories();
+
+    serveResponse(res, {
+      message: 'Categories retrieved successfully!',
+      data: categories,
     });
   }),
 };

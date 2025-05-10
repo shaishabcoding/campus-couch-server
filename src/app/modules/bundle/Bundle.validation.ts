@@ -1,6 +1,8 @@
 import { z } from 'zod';
 import { exists } from '../../../util/db/exists';
 import { Product } from '../product/Product.model';
+import { json } from '../../../util/transform/json';
+import { boolean } from '../../../util/transform/boolean';
 
 export const BundleValidations = {
   create: z.object({
@@ -10,9 +12,7 @@ export const BundleValidations = {
       images: z.array(z.string()).min(1, 'At least one image is required'),
       products: z
         .string()
-        .transform(
-          strProducts => strProducts && (JSON.parse(strProducts) as string[]),
-        )
+        .transform(json)
         .pipe(
           z
             .array(z.string().refine(exists(Product)))
@@ -20,12 +20,9 @@ export const BundleValidations = {
         ),
       price: z.coerce.number().optional(),
       rentPrice: z.coerce.number().optional(),
-      isBuyable: z.boolean().optional(),
-      isRentable: z.boolean().optional(),
-      notes: z
-        .string()
-        .transform(strNotes => strNotes && (JSON.parse(strNotes) as string[]))
-        .optional(),
+      isBuyable: z.string().transform(boolean).optional(),
+      isRentable: z.string().transform(boolean).optional(),
+      notes: z.string().transform(json).optional(),
       rating: z.coerce.number().min(1).max(5).default(5),
       stock: z.coerce.number().min(1, 'Stock must be at least 1'),
     }),
@@ -38,19 +35,14 @@ export const BundleValidations = {
       images: z.array(z.string()).optional(),
       products: z
         .string()
-        .transform(strProducts =>
-          strProducts ? (JSON.parse(strProducts) as string[]) : [],
-        )
+        .transform(json)
         .pipe(z.array(z.string().refine(exists(Product))))
         .optional(),
       price: z.coerce.number().optional(),
       rentPrice: z.coerce.number().optional(),
-      isBuyable: z.boolean().optional(),
-      isRentable: z.boolean().optional(),
-      notes: z
-        .string()
-        .transform(strNotes => strNotes && (JSON.parse(strNotes) as string[]))
-        .optional(),
+      isBuyable: z.string().transform(boolean).optional(),
+      isRentable: z.string().transform(boolean).optional(),
+      notes: z.string().transform(json).optional(),
       rating: z.coerce.number().min(1).max(5).optional(),
       stock: z.coerce.number().min(0).optional(),
     }),

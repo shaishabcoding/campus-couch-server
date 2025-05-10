@@ -14,7 +14,7 @@ export const UserControllers = {
   }),
 
   edit: catchAsync(async (req, res) => {
-    req.body.avatar = req.body.images[0];
+    req.body.avatar = req.body.images?.[0];
 
     const updatedUser = await UserServices.edit(req);
 

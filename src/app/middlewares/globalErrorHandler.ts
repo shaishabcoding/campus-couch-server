@@ -12,6 +12,8 @@ import handleMongooseDuplicateError from '../../errors/handleMongooseDuplicateEr
 import { errorLogger } from '../../util/logger/logger';
 import { TErrorHandler, TErrorMessage } from '../../types/errors.types';
 import deleteFile from '../../util/file/deleteFile';
+import multer from 'multer';
+import handleMulterError from '../../errors/handleMulterError';
 
 const defaultError: TErrorHandler = {
   statusCode: StatusCodes.INTERNAL_SERVER_ERROR,
@@ -40,6 +42,7 @@ const globalErrorHandler: ErrorRequestHandler = (error, req, res, _) => {
 export default globalErrorHandler;
 
 const formatError = (error: any): TErrorHandler => {
+  if (error instanceof multer.MulterError) return handleMulterError(error);
   if (error instanceof ZodError) return handleZodError(error);
   if (error instanceof mongoose.Error.ValidationError)
     return handleValidationError(error);
@@ -60,6 +63,6 @@ const formatError = (error: any): TErrorHandler => {
   return defaultError;
 };
 
-const createErrorMessage = (message: string): TErrorMessage[] => [
+export const createErrorMessage = (message: string): TErrorMessage[] => [
   { path: '', message },
 ];

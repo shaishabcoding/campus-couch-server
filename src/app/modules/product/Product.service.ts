@@ -123,31 +123,36 @@ export const ProductServices = {
     return product;
   },
 
-  async search({ name, page, limit }: Record<string, any>) {
-    const products = await Product.find({
-      name: { $regex: name, $options: 'i' },
-    })
-      .select('name images')
-      .skip((page - 1) * limit)
-      .limit(limit);
+  async search() {
+    return Product.find().select('name images');
+  },
 
-    const total = await Product.countDocuments({
-      name: { $regex: name, $options: 'i' },
-    });
+  async relatedProducts(productId: string) {
+    const product = (await Product.findById(productId).populate('category'))!;
 
-    return {
-      products,
-      meta: {
-        pagination: {
-          page,
-          limit,
-          total,
-          totalPages: Math.ceil(total / limit),
-        },
-        current: {
-          name,
+    const relatedProducts = await Product.find({
+      category: product.category,
+      _id: { $ne: productId },
+    }).limit(4);
+
+    return relatedProducts;
+  },
+
+  async categories() {
+    return Product.aggregate([
+      {
+        $group: {
+          _id: '$category',
+          firstImage: { $first: '$images' },
         },
       },
-    };
+      {
+        $project: {
+          name: '$_id',
+          image: { $arrayElemAt: ['$firstImage', 0] },
+          _id: 0,
+        },
+      },
+    ]);
   },
 };

@@ -1,5 +1,8 @@
+/* eslint-disable no-console */
 import { AnyZodObject } from 'zod';
 import catchAsync from '../../util/server/catchAsync';
+
+const keys = ['body', 'query', 'cookies'] as const;
 
 /**
  * Middleware to purify and validate the request {body, cookies, query, params} using multiple Zod schemas.
@@ -17,14 +20,18 @@ const purifyRequest = (...schemas: AnyZodObject[]) =>
       schemas.map(schema => schema.parseAsync(req)),
     );
 
-    req.body = Object.assign({}, req.body, ...results.map(r => r.body));
-    req.query = Object.assign({}, req.query, ...results.map(r => r.query));
-    req.params = Object.assign({}, req.params, ...results.map(r => r.params));
-    req.cookies = Object.assign(
+    req.params = Object.assign(
       {},
-      req.cookies,
-      ...results.map(r => r.cookies),
+      req.params,
+      ...results.map(result => result?.params ?? {}),
     );
+
+    keys.forEach(key => {
+      req[key] = Object.assign(
+        {},
+        ...results.map(result => result?.[key] ?? {}),
+      );
+    });
 
     next();
   });
