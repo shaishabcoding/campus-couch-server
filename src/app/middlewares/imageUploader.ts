@@ -1,12 +1,13 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable no-undef, no-unused-vars */
 import path from 'path';
 import multer, { FileFilterCallback } from 'multer';
 import { StatusCodes } from 'http-status-codes';
 import ServerError from '../../errors/ServerError';
-import deleteFile from '../../util/file/deleteFile';
+// import deleteFile from '../../util/file/deleteFile';
 import { createDir } from '../../util/file/createDir';
 import catchAsync from '../../util/server/catchAsync';
-import sharp from 'sharp';
+// import sharp from 'sharp';
 
 /**
  * @description Multer middleware to handle image uploads with optional resizing.
@@ -65,29 +66,30 @@ const imageUploader = ({
       const resizedImages: string[] = [];
 
       for (const file of uploadedImages.images) {
-        const filePath = path.join(uploadDir, file.filename);
+        // const filePath = path.join(uploadDir, file.filename);
 
-        if (!width && !height) resizedImages.push(`/images/${file.filename}`);
-        else {
-          const resizedFilePath = path.join(resizedDir, file.filename);
+        // if (!width && !height)
+        resizedImages.push(`/images/${file.filename}`);
+        // else {
+        //   const resizedFilePath = path.join(resizedDir, file.filename);
 
-          try {
-            await sharp(filePath)
-              .resize(width, height, { fit: 'inside' })
-              .toFile(resizedFilePath);
+        //   try {
+        //     await sharp(filePath)
+        //       .resize(width, height, { fit: 'inside' })
+        //       .toFile(resizedFilePath);
 
-            await deleteFile(`/images/${file.filename}`);
+        //     await deleteFile(`/images/${file.filename}`);
 
-            resizedImages.push(`/images/resized/${file.filename}`);
-          } catch {
-            next(
-              new ServerError(
-                StatusCodes.INTERNAL_SERVER_ERROR,
-                'Image resizing failed',
-              ),
-            );
-          }
-        }
+        //     resizedImages.push(`/images/resized/${file.filename}`);
+        //   } catch {
+        //     next(
+        //       new ServerError(
+        //         StatusCodes.INTERNAL_SERVER_ERROR,
+        //         'Image resizing failed',
+        //       ),
+        //     );
+        //   }
+        // }
       }
 
       req.body.images = resizedImages;
