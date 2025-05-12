@@ -9,7 +9,7 @@ export const UserValidations = {
         .string()
         .min(1, 'Password is required')
         .min(6, 'Password must be at least 6 characters long'),
-      images: z.array(z.string()).min(1, 'Avatar is missing'),
+      images: z.array(z.string()).optional(),
     }),
   }),
 
