@@ -40,7 +40,6 @@ const bundleSchema = new Schema<TBundle>(
     rating: {
       type: Number,
       required: true,
-      default: 5,
     },
     stock: {
       type: Number,

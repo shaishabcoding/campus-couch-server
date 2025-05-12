@@ -51,7 +51,6 @@ const productSchema = new Schema<TProduct>(
       type: Number,
       min: 1,
       max: 5,
-      default: 5,
     },
     color: String,
     size: String,
