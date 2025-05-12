@@ -29,6 +29,7 @@ const productSchema = new Schema<TProduct>(
     },
     isBuyable: {
       type: Boolean,
+      default: true,
     },
     category: {
       type: String,

@@ -7,10 +7,10 @@ import { TProduct } from './Product.interface';
 export const ProductControllers = {
   create: catchAsync(async ({ body, user, params }, res) => {
     const productData: TProduct = {
-      isBuyable: !!body.price,
       isRentable: !!body.rentPrice,
       ...body,
       admin: user!._id!,
+      isBuyable: true,
     };
 
     productData.refProduct = params?.productId;
@@ -29,7 +29,7 @@ export const ProductControllers = {
 
     if (body.price) productData.isBuyable = true;
     if (body.rentPrice) productData.isRentable = true;
-    if (!body.isBuyable && body.price) productData.isBuyable = true;
+    productData.isBuyable = true;
     if (!body.isRentable && body.rentPrice) productData.isRentable = true;
 
     Object.assign(productData, body);

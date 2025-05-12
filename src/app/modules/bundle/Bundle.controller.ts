@@ -7,10 +7,10 @@ import { TBundle } from './Bundle.interface';
 export const BundleControllers = {
   create: catchAsync(async ({ body, user }, res) => {
     const bundleData: TBundle = {
-      isBuyable: !!body.price,
       isRentable: !!body.rentPrice,
       ...body,
       admin: user?._id,
+      isBuyable: true,
     };
 
     const data = await BundleServices.create(bundleData);
@@ -25,7 +25,7 @@ export const BundleControllers = {
   edit: catchAsync(async ({ params, body }, res) => {
     const bundleData: Partial<TBundle> = {};
 
-    if (body.price) bundleData.isBuyable = true;
+    bundleData.isBuyable = true;
     if (body.rentPrice) bundleData.isRentable = true;
 
     Object.assign(bundleData, body);
