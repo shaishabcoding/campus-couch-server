@@ -1,7 +1,6 @@
 node_modules
-.env
+# .env
 
 winston
 .vscode
-uploads
 dist
