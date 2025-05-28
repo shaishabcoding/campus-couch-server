@@ -16,10 +16,7 @@ admin.get('/', ProductControllers.search);
 
 admin.post(
   '/create',
-  imageUploader({
-    width: 700,
-    height: 700,
-  }),
+  imageUploader(),
   purifyRequest(ProductValidations.create),
   ProductControllers.create,
 );
@@ -27,10 +24,7 @@ admin.post(
 admin.patch(
   '/:productId/edit',
   purifyRequest(QueryValidations.exists('productId', Product)),
-  imageUploader({
-    width: 700,
-    height: 700,
-  }),
+  imageUploader(),
   purifyRequest(ProductValidations.edit),
   ProductControllers.edit,
 );
@@ -45,10 +39,7 @@ admin.delete(
 admin.post(
   '/:productId/variant',
   purifyRequest(QueryValidations.exists('productId', Product)),
-  imageUploader({
-    width: 700,
-    height: 700,
-  }),
+  imageUploader(),
   purifyRequest(ProductValidations.create),
   ProductControllers.create,
 );

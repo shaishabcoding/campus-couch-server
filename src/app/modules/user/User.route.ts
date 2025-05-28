@@ -13,10 +13,7 @@ export const UserRoutes = {
   ),
   user: Router().patch(
     '/edit',
-    imageUploader({
-      width: 300,
-      height: 300,
-    }),
+    imageUploader(),
     purifyRequest(UserValidations.edit),
     UserControllers.edit,
   ),

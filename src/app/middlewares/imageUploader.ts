@@ -4,21 +4,13 @@ import path from 'path';
 import multer, { FileFilterCallback } from 'multer';
 import { StatusCodes } from 'http-status-codes';
 import ServerError from '../../errors/ServerError';
-// import deleteFile from '../../util/file/deleteFile';
 import { createDir } from '../../util/file/createDir';
 import catchAsync from '../../util/server/catchAsync';
-// import sharp from 'sharp';
 
 /**
  * @description Multer middleware to handle image uploads with optional resizing.
  */
-const imageUploader = ({
-  width,
-  height,
-}: {
-  width?: number;
-  height?: number;
-} = {}) => {
+const imageUploader = () => {
   const uploadDir = path.join(process.cwd(), 'uploads', 'images');
   const resizedDir = path.join(uploadDir, 'resized');
 
@@ -66,30 +58,7 @@ const imageUploader = ({
       const resizedImages: string[] = [];
 
       for (const file of uploadedImages.images) {
-        // const filePath = path.join(uploadDir, file.filename);
-
-        // if (!width && !height)
         resizedImages.push(`/images/${file.filename}`);
-        // else {
-        //   const resizedFilePath = path.join(resizedDir, file.filename);
-
-        //   try {
-        //     await sharp(filePath)
-        //       .resize(width, height, { fit: 'inside' })
-        //       .toFile(resizedFilePath);
-
-        //     await deleteFile(`/images/${file.filename}`);
-
-        //     resizedImages.push(`/images/resized/${file.filename}`);
-        //   } catch {
-        //     next(
-        //       new ServerError(
-        //         StatusCodes.INTERNAL_SERVER_ERROR,
-        //         'Image resizing failed',
-        //       ),
-        //     );
-        //   }
-        // }
       }
 
       req.body.images = resizedImages;

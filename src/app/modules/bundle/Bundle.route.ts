@@ -17,10 +17,7 @@ const admin = Router();
 
 admin.post(
   '/create',
-  imageUploader({
-    width: 700,
-    height: 700,
-  }),
+  imageUploader(),
   purifyRequest(BundleValidations.create),
   BundleControllers.create,
 );
@@ -28,10 +25,7 @@ admin.post(
 admin.patch(
   '/:bundleId/edit',
   purifyRequest(QueryValidations.exists('bundleId', Bundle)),
-  imageUploader({
-    width: 700,
-    height: 700,
-  }),
+  imageUploader(),
   purifyRequest(BundleValidations.edit),
   BundleControllers.edit,
 );

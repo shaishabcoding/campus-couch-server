@@ -12,10 +12,7 @@ const router = express.Router();
 
 router.post(
   '/register',
-  imageUploader({
-    width: 300,
-    height: 300,
-  }),
+  imageUploader(),
   purifyRequest(UserValidations.create),
   UserControllers.create,
 );
@@ -23,10 +20,7 @@ router.post(
 router.patch(
   '/edit',
   auth(EUserRole.USER, EUserRole.ADMIN),
-  imageUploader({
-    width: 300,
-    height: 300,
-  }),
+  imageUploader(),
   purifyRequest(UserValidations.edit),
   UserControllers.edit,
 );

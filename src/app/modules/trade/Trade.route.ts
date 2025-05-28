@@ -23,10 +23,7 @@ router.get(
 
 router.post(
   '/create',
-  imageUploader({
-    width: 700,
-    height: 700,
-  }),
+  imageUploader(),
   purifyRequest(TradeValidations.create),
   TradeControllers.create,
 );
@@ -40,9 +37,10 @@ router.patch(
   TradeControllers.changeState,
 );
 
-router.delete("/:tradeId/delete",
+router.delete(
+  '/:tradeId/delete',
   purifyRequest(QueryValidations.exists('tradeId', Trade)),
-  TradeControllers.delete
+  TradeControllers.delete,
 );
 
 export const TradeRoutes = router;
