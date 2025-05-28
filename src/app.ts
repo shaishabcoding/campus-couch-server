@@ -18,7 +18,8 @@ import config from './config';
 const app = express();
 
 // Serve static files
-app.use(express.static('uploads'), express.static('public'));
+app.use(express.static('uploads'));
+app.use(express.static('public'));
 
 // Configure middleware
 app.use(
