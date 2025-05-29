@@ -31,18 +31,34 @@ export default imageUploader;
 /**
  * @description Retrieves an image from MongoDB GridFS
  */
-export const imageRetriever = catchAsync(
-  async (req, res) =>
-    new Promise((resolve, reject) =>
-      bucket
-        .openDownloadStreamByName(req.params.filename)
-        .on('error', () =>
-          reject(new ServerError(StatusCodes.NOT_FOUND, 'Image not found')),
-        )
-        .pipe(res)
-        .on('end', resolve),
-    ),
-);
+export const imageRetriever = catchAsync(async (req, res) => {
+  let filename = req.params.filename.replace(/[^\w.-]/g, '');
+  const shouldRedirect = !/\.png$/i.test(filename);
+
+  if (shouldRedirect) filename = `${filename.replace(/\.[a-zA-Z]+$/, '')}.png`;
+
+  const fileExists = await bucket.find({ filename }).hasNext();
+  if (!fileExists)
+    throw new ServerError(StatusCodes.NOT_FOUND, 'Image not found');
+
+  if (shouldRedirect)
+    return res.redirect(
+      StatusCodes.MOVED_PERMANENTLY,
+      `/images/${encodeURIComponent(filename)}`,
+    );
+
+  return new Promise((resolve, reject) => {
+    const stream = bucket
+      .openDownloadStreamByName(filename)
+      .on('error', () =>
+        reject(new ServerError(StatusCodes.NOT_FOUND, 'Stream error')),
+      )
+      .pipe(res)
+      .on('finish', resolve);
+
+    res.on('close', () => stream.destroy());
+  });
+});
 
 /**
  * @description Deletes an image from MongoDB GridFS

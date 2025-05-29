@@ -8,6 +8,7 @@ import cookieParser from 'cookie-parser';
 import ServerError from './errors/ServerError';
 import serveResponse from './util/server/serveResponse';
 import config from './config';
+import { imageRetriever } from './app/middlewares/imageUploader';
 
 /**
  * The main application instance
@@ -20,6 +21,8 @@ const app = express();
 // Serve static files
 app.use(express.static('uploads'));
 app.use(express.static('public'));
+
+app.get('/images/:filename', imageRetriever);
 
 // Configure middleware
 app.use(
