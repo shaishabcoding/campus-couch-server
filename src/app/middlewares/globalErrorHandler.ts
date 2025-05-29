@@ -35,7 +35,7 @@ const globalErrorHandler: ErrorRequestHandler = (error, req, res, _) => {
     success: false,
     message,
     errorMessages,
-    stack: config.server.node_env === 'development' && error.stack,
+    stack: config.server.node_env === 'development' ? error.stack : undefined,
   });
 };
 
