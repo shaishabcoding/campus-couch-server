@@ -8,6 +8,14 @@ import config from '../../config';
 import mongoose from 'mongoose';
 import { GridFSBucket } from 'mongodb';
 
+let bucket: GridFSBucket | null = null;
+
+mongoose.connection.on('connected', () => {
+  bucket ??= new GridFSBucket(mongoose.connection.db!, {
+    bucketName: 'images',
+  });
+});
+
 /**
  * @description Multer middleware to handle image uploads to MongoDB GridFS
  */
@@ -32,6 +40,12 @@ export default imageUploader;
  * @description Retrieves an image from MongoDB GridFS
  */
 export const imageRetriever = catchAsync(async (req, res) => {
+  if (!bucket)
+    throw new ServerError(
+      StatusCodes.SERVICE_UNAVAILABLE,
+      'Images not available',
+    );
+
   let filename = req.params.filename.replace(/[^\w.-]/g, '');
   const shouldRedirect = !/\.png$/i.test(filename);
 
@@ -48,7 +62,8 @@ export const imageRetriever = catchAsync(async (req, res) => {
     );
 
   return new Promise((resolve, reject) => {
-    const stream = bucket
+    res.set('Content-Type', 'image/png');
+    const stream = bucket!
       .openDownloadStreamByName(filename)
       .on('error', () =>
         reject(new ServerError(StatusCodes.NOT_FOUND, 'Stream error')),
@@ -64,9 +79,10 @@ export const imageRetriever = catchAsync(async (req, res) => {
  * @description Deletes an image from MongoDB GridFS
  */
 export const deleteImage = async (filename: string) =>
+  bucket &&
   Promise.all(
     (await bucket.find({ filename }).toArray())?.map(({ _id }) =>
-      bucket.delete(_id),
+      bucket!.delete(_id),
     ),
   );
 
@@ -101,7 +117,3 @@ const fileFilter = (
 };
 
 const upload = multer({ storage, fileFilter }).fields([{ name: 'images' }]);
-
-const bucket = new GridFSBucket(mongoose.connection.db!, {
-  bucketName: 'images',
-});
