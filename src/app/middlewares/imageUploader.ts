@@ -11,7 +11,7 @@ import { GridFSBucket } from 'mongodb';
 let bucket: GridFSBucket | null = null;
 
 mongoose.connection.on('connected', () => {
-  bucket ??= new GridFSBucket(mongoose.connection.db!, {
+  bucket ??= new GridFSBucket(mongoose.connection.db as any, {
     bucketName: 'images',
   });
 });
@@ -94,7 +94,10 @@ const storage = new GridFsStorage({
       .replace(/[^\w]+/g, '-')
       .toLowerCase()}-${Date.now()}.png`,
     bucketName: 'images',
-    metadata: { uploadedBy: req.user?._id, originalName: originalname },
+    metadata: {
+      uploadedBy: req?.user?._id ?? null,
+      originalName: originalname,
+    },
   }),
 });
 
