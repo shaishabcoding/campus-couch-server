@@ -1,4 +1,4 @@
-import deleteFile from '../../../util/file/deleteFile';
+import { deleteImage } from '../../middlewares/imageUploader';
 import { Product } from '../product/Product.model';
 import { TBundle } from './Bundle.interface';
 import Bundle from './Bundle.model';
@@ -17,7 +17,7 @@ export const BundleServices = {
 
     await bundle.save();
 
-    if (bundleData?.images) oldImages?.forEach(deleteFile);
+    if (bundleData?.images) oldImages?.forEach(deleteImage);
 
     return bundle;
   },
@@ -25,7 +25,7 @@ export const BundleServices = {
   async delete(bundleId: string) {
     const bundle = (await Bundle.findByIdAndDelete(bundleId))!;
 
-    bundle.images?.forEach(deleteFile);
+    bundle.images?.forEach(deleteImage);
 
     return bundle;
   },

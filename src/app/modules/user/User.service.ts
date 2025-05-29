@@ -2,7 +2,7 @@ import { TUser } from './User.interface';
 import User from './User.model';
 import { StatusCodes } from 'http-status-codes';
 import { Request } from 'express';
-import deleteFile from '../../../util/file/deleteFile';
+import { deleteImage } from '../../middlewares/imageUploader';
 import ServerError from '../../../errors/ServerError';
 import { AuthServices } from '../auth/Auth.service';
 
@@ -28,7 +28,7 @@ export const UserServices = {
       runValidators: true,
     }).select('name avatar email role');
 
-    if (userData?.avatar) await deleteFile(oldAvatar!);
+    if (userData?.avatar) await deleteImage(oldAvatar!);
 
     return updatedUser;
   },

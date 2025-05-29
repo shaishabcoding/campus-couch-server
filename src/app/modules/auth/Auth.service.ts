@@ -9,7 +9,7 @@ import { Types } from 'mongoose';
 import config from '../../../config';
 import { EUserStatus } from '../user/User.enum';
 import downloadImage from '../../../util/file/downloadImage';
-import deleteFile from '../../../util/file/deleteFile';
+import { deleteImage } from '../../middlewares/imageUploader';
 import { Request, Response } from 'express';
 import { facebookUser } from './Auth.lib';
 
@@ -160,7 +160,7 @@ export const AuthServices = {
       if (newAvatar && user.avatar !== newAvatar) {
         const oldAvatar = user.avatar;
         user.avatar = newAvatar;
-        if (oldAvatar) await deleteFile(oldAvatar);
+        if (oldAvatar) await deleteImage(oldAvatar);
       }
 
       Object.assign(user, { name, status: EUserStatus.ACTIVE });
@@ -194,7 +194,7 @@ export const AuthServices = {
       if (newAvatar && user.avatar !== newAvatar) {
         const oldAvatar = user.avatar;
         user.avatar = newAvatar;
-        if (oldAvatar) await deleteFile(oldAvatar);
+        if (oldAvatar) await deleteImage(oldAvatar);
       }
 
       Object.assign(user, { name: userData.name, status: EUserStatus.ACTIVE });

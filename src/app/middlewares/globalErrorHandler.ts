@@ -11,7 +11,7 @@ import handleValidationError from '../../errors/handleValidationError';
 import handleMongooseDuplicateError from '../../errors/handleMongooseDuplicateError';
 import { errorLogger } from '../../util/logger/logger';
 import { TErrorHandler, TErrorMessage } from '../../types/errors.types';
-import deleteFile from '../../util/file/deleteFile';
+import { deleteImage } from './imageUploader';
 import multer from 'multer';
 import handleMulterError from '../../errors/handleMulterError';
 
@@ -23,11 +23,20 @@ const defaultError: TErrorHandler = {
 
 const globalErrorHandler: ErrorRequestHandler = (error, req, res, _) => {
   /** delete uploaded files */
-  req.body?.images?.forEach(deleteFile);
+  req.body?.images?.forEach(deleteImage);
 
   if (config.server.node_env === 'development')
-    console.log(colors.red('🚨 globalErrorHandler ~~ '), error);
-  else errorLogger.error(colors.red('🚨 globalErrorHandler ~~ '), error);
+    console.log(
+      colors.red('🚨 globalErrorHandler ~~ '),
+      error?.message,
+      error?.stack,
+    );
+  else
+    errorLogger.error(
+      colors.red('🚨 globalErrorHandler ~~ '),
+      error?.message,
+      error?.stack,
+    );
 
   const { statusCode, message, errorMessages } = formatError(error);
 

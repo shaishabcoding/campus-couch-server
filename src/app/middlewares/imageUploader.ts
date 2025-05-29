@@ -7,6 +7,8 @@ import catchAsync from '../../util/server/catchAsync';
 import config from '../../config';
 import mongoose from 'mongoose';
 import { GridFSBucket } from 'mongodb';
+import { errorLogger, logger } from '../../util/logger/logger';
+import colors from 'colors';
 
 let bucket: GridFSBucket | null = null;
 
@@ -78,13 +80,32 @@ export const imageRetriever = catchAsync(async (req, res) => {
 /**
  * @description Deletes an image from MongoDB GridFS
  */
-export const deleteImage = async (filename: string) =>
-  bucket &&
-  Promise.all(
-    (await bucket.find({ filename }).toArray())?.map(({ _id }) =>
-      bucket!.delete(_id),
-    ),
-  );
+export const deleteImage = async (filename: string) => {
+  try {
+    if (!bucket) return;
+
+    logger.info(colors.yellow(`🗑️ Deleting image: ${filename}`));
+
+    const result = await Promise.all(
+      (
+        await bucket
+          .find({ filename: filename.replace(/^\/images\//, '') })
+          .toArray()
+      )?.map(({ _id }) => bucket!.delete(_id)),
+    );
+
+    if (result)
+      logger.info(colors.green(`✔ image ${filename} deleted successfully!`));
+    else logger.info(colors.red(`❌ image ${filename} not deleted!`));
+
+    return result;
+  } catch (error: any) {
+    errorLogger.error(
+      colors.red(`❌ image ${filename} not deleted!`),
+      error?.stack ?? error,
+    );
+  }
+};
 
 const storage = new GridFsStorage({
   url: config.url.database,

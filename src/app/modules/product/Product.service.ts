@@ -1,5 +1,5 @@
 import { RootFilterQuery } from 'mongoose';
-import deleteFile from '../../../util/file/deleteFile';
+import { deleteImage } from '../../middlewares/imageUploader';
 import { TProduct } from './Product.interface';
 import { Product } from './Product.model';
 
@@ -17,7 +17,7 @@ export const ProductServices = {
 
     await product.save();
 
-    if (productData?.images) oldImages?.forEach(deleteFile);
+    if (productData?.images) oldImages?.forEach(deleteImage);
 
     return product;
   },
@@ -118,7 +118,7 @@ export const ProductServices = {
   async delete(productId: string) {
     const product = (await Product.findByIdAndDelete(productId))!;
 
-    product.images?.forEach(deleteFile);
+    product.images?.forEach(deleteImage);
 
     return product;
   },
